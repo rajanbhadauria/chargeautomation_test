@@ -1,5 +1,5 @@
 import stripe
-stripe.api_key = "sk_test_qyGavVyibjgXtyoWCTtDQhme"
+stripe.api_key = ""
 
 
 class ApplicationFee:
