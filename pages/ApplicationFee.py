@@ -1,7 +1,6 @@
 import stripe
 
 
-
 class ApplicationFee:
 
     def getCustomers(self, limitcount=1):
