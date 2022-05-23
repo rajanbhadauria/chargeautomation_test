@@ -10,5 +10,10 @@ class HomePage:
 
     def loginBtn(self):
         return self.driver.find_element(By.LINK_TEXT, 'LOG IN')
+
+    def signupBtn(self):
+        return self.driver.find_element(By.XPATH, "//a[contains(@href, '/register')]")
+
+
         
 
