@@ -2,7 +2,6 @@ from datetime import datetime
 from pathlib import Path
 
 import pytest
-import chromedriver_binary
 from selenium import webdriver
 driver = None
 
