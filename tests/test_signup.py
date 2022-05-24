@@ -112,7 +112,7 @@ class TestSignup(BaseClass):
         signup.email().clear()
         signup.email().send_keys(fake.email())
         log.info("Email - " + f"'{signup.email().get_attribute('value')}'")
-        password = "1" # fake.password()
+        password = "1"  # fake.password()
         signup.password().clear()
         signup.password().send_keys(password)
         log.info("Password - " + f"'{signup.password().get_attribute('value')}'")
@@ -130,7 +130,6 @@ class TestSignup(BaseClass):
 
         log.info('Password error message: ' + signup.passwordError().text)
         assert ('at least 6 characters' in signup.passwordError().text)
-
 
     # Test signup with not matching password and confirm password
     def test_signup_with_not_matching_password(self):
@@ -361,4 +360,109 @@ class TestSignup(BaseClass):
         log.info('PMS error message: ' + signup.pmsError().text)
         assert ('current pms format' in signup.pmsError().text)
 
-    # Test signup with valid email
+    # Test signup with js and php code
+    def test_signup_with_js_php_code(self):
+        """Test signup with js and php code"""
+        log = self.myLogger()
+        signup = SignupPage(self.driver)
+        fake = Faker()
+        log.info("Filling Form Data -- ")
+        signup.fullName().clear()
+        signup.fullName().send_keys('<script>alert("")</script>')
+        log.info("Full Name - " + f"'{signup.fullName().get_attribute('value')}'")
+
+        signup.companyName().clear()
+        signup.companyName().send_keys('<script>alert("")</script>')
+        log.info("Company Name - " + f"'{signup.companyName().get_attribute('value')}'")
+
+        signup.phone().clear()
+        signup.phone().send_keys('<?php echo "123"?>')
+        log.info("Phone no - " + f"'{signup.phone().get_attribute('value')}'")
+
+        signup.email().clear()
+        signup.email().send_keys('<script>alert("")</script>')
+        log.info("Email - " + f"'{signup.email().get_attribute('value')}'")
+        password = '<script>alert("")</script><?php die();?>'
+
+        signup.password().clear()
+        signup.password().send_keys(password)
+        log.info("Password - " + f"'{signup.password().get_attribute('value')}'")
+
+        signup.confirm_password().clear()
+        signup.confirm_password().send_keys(password)
+        log.info("Confirm Password - " + f"'{signup.confirm_password().get_attribute('value')}'")
+
+        signup.pms().clear()
+        signup.pms().send_keys('<?php die();?>')
+        log.info("PMS - " + f"'{signup.pms().get_attribute('value')}'")
+
+        # signup.agree().click()
+        log.info("Terms not accepted")
+        log.info('Submitting signup form')
+        signup.signupSubmit().click()
+        time.sleep(2)
+
+        log.info('Full name error message: ' + signup.fullNameError().text)
+        assert ('format is invalid.' in signup.fullNameError().text)
+
+        log.info('Company name error message: ' + signup.companyNameError().text)
+        assert ('Only alpha-numeric characters' in signup.companyNameError().text)
+
+        # log.info('Phone error message: ' + signup.phoneError().text)
+        # assert ('phone number' in signup.phoneError().text)
+
+        log.info('Email error message: ' + signup.emailError().text)
+        assert ('a valid email address' in signup.emailError().text)
+
+        log.info('PMS error message: ' + signup.pmsError().text)
+        assert ('current pms format' in signup.pmsError().text)
+
+    # Test signup with valid data
+    def test_signup_with_valid_data(self):
+        """Test signup with valid data"""
+        log = self.myLogger()
+        signup = SignupPage(self.driver)
+        fake = Faker()
+        log.info("Filling Form Data -- ")
+        signup.fullName().clear()
+        fullName = fake.name();
+        signup.fullName().send_keys(fullName)
+        log.info("Full Name - " + f"'{signup.fullName().get_attribute('value')}'")
+
+        signup.companyName().clear()
+        signup.companyName().send_keys(fake.last_name())
+        log.info("Company Name - " + f"'{signup.companyName().get_attribute('value')}'")
+
+        signup.phone().clear()
+        signup.phone().send_keys(fake.phone_number())
+        log.info("Phone no - " + f"'{signup.phone().get_attribute('value')}'")
+
+        signup.email().clear()
+        email = fake.email(domain='yopmail.com')
+        signup.email().send_keys(email)
+        log.info("Email - " + f"'{signup.email().get_attribute('value')}'")
+        password = fake.password()
+
+        signup.password().clear()
+        signup.password().send_keys(password)
+        log.info("Password - " + f"'{signup.password().get_attribute('value')}'")
+
+        signup.confirm_password().clear()
+        signup.confirm_password().send_keys(password)
+        log.info("Confirm Password - " + f"'{signup.confirm_password().get_attribute('value')}'")
+
+        signup.pms().clear()
+        signup.pms().send_keys(fake.first_name())
+        log.info("PMS - " + f"'{signup.pms().get_attribute('value')}'")
+
+        signup.agree().click()
+        log.info("Terms accepted")
+        log.info('Submitting signup form')
+        signup.signupSubmit().click()
+        time.sleep(5)
+
+        log.info('Success user name - ' + f"'{signup.signup_success_name().text}'")
+        assert (fullName in signup.signup_success_name().text)
+
+        log.info('Success user email - ' + f"'{signup.signup_success_message().text}'")
+        assert (email in signup.signup_success_message().text)

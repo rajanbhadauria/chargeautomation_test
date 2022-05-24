@@ -58,6 +58,11 @@ class SignupPage:
     def signupSubmit(self):
         return self.driver.find_element(By.ID, "signupbtn")
 
+    def signup_success_name(self):
+        return self.driver.find_element(By.XPATH, "//h2")
+
+    def signup_success_message(self):
+        return self.driver.find_element(By.XPATH, "//p[1]")
 
 
 
