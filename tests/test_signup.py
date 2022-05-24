@@ -1,5 +1,7 @@
 import time
 
+from faker import Faker
+
 from pages.HomePage import HomePage
 from pages.SignupPage import SignupPage
 from utilities.BaseClass import BaseClass
@@ -33,8 +35,8 @@ class TestSignup(BaseClass):
         log.info("Confirm Password - " + f"'{signup.confirm_password().get_attribute('value')}'")
         signup.pms().send_keys("")
         log.info("PMS - " + f"'{signup.pms().get_attribute('value')}'")
-        signup.agree().click()
-        log.info("PMS - Terms accepted")
+        # signup.agree().click()
+        log.info("Terms not accepted")
         log.info('Submitting signup form')
         signup.signupSubmit().click()
         time.sleep(2)
@@ -51,23 +53,124 @@ class TestSignup(BaseClass):
         log.info('Email error message: ' + signup.emailError().text)
         assert ('email address' in signup.emailError().text)
 
+        log.info('Password error message: ' + signup.passwordError().text)
+        assert ('Enter password' in signup.passwordError().text)
+
+        log.info('Confirm password error message: ' + signup.confirmPasswordError().text)
+        assert ('confirm password' in signup.confirmPasswordError().text)
+
+        log.info('Terms error message: ' + signup.agreeError().text)
+        assert ('terms and conditions' in signup.agreeError().text)
+
+    # Test signup with invalid email
+    def test_signup_with_invalid_email(self):
+        """Test signup with invalid email"""
+        log = self.myLogger()
+        signup = SignupPage(self.driver)
+        fake = Faker()
+        log.info("Input data in full name field")
+        signup.fullName().send_keys(fake.name())
+        log.info("Full Name - " + f"'{signup.fullName().get_attribute('value')}'")
+        signup.companyName().send_keys(fake.company())
+        log.info("Company Name - " + f"'{signup.companyName().get_attribute('value')}'")
+        signup.phone().send_keys(fake.phone_number())
+        log.info("Phone no - " + f"'{signup.phone().get_attribute('value')}'")
+        signup.email().send_keys(fake.user_name())
+        log.info("Email - " + f"'{signup.email().get_attribute('value')}'")
+        password = fake.password()
+        signup.password().send_keys(password)
+        log.info("Password - " + f"'{signup.password().get_attribute('value')}'")
+        signup.confirm_password().send_keys(password)
+        log.info("Confirm Password - " + f"'{signup.confirm_password().get_attribute('value')}'")
+        signup.pms().send_keys(fake.company())
+        log.info("PMS - " + f"'{signup.pms().get_attribute('value')}'")
+        signup.agree().click()
+        log.info("Terms accepted")
+        log.info('Submitting signup form')
+        signup.signupSubmit().click()
+        time.sleep(2)
+
+        log.info('Email error message: ' + signup.emailError().text)
+        assert ('valid email address' in signup.emailError().text)
+
+    # Test signup with min length password
+    def test_signup_with_min_lengh_password(self):
+        """Test signup with min length password"""
+        log = self.myLogger()
+        signup = SignupPage(self.driver)
+        fake = Faker()
+        log.info("Input data in full name field")
+        signup.fullName().clear()
+        signup.fullName().send_keys(fake.name())
+        log.info("Full Name - " + f"'{signup.fullName().get_attribute('value')}'")
+        signup.companyName().clear()
+        signup.companyName().send_keys(fake.company())
+        log.info("Company Name - " + f"'{signup.companyName().get_attribute('value')}'")
+        signup.phone().clear()
+        signup.phone().send_keys(fake.phone_number())
+        log.info("Phone no - " + f"'{signup.phone().get_attribute('value')}'")
+        signup.email().clear()
+        signup.email().send_keys(fake.email())
+        log.info("Email - " + f"'{signup.email().get_attribute('value')}'")
+        password = "1" # fake.password()
+        signup.password().clear()
+        signup.password().send_keys(password)
+        log.info("Password - " + f"'{signup.password().get_attribute('value')}'")
+        signup.confirm_password().clear()
+        signup.confirm_password().send_keys(password)
+        log.info("Confirm Password - " + f"'{signup.confirm_password().get_attribute('value')}'")
+        signup.pms().clear()
+        signup.pms().send_keys(fake.company())
+        log.info("PMS - " + f"'{signup.pms().get_attribute('value')}'")
+        signup.agree().click()
+        log.info("Terms accepted")
+        log.info('Submitting signup form')
+        signup.signupSubmit().click()
+        time.sleep(2)
+
+        log.info('Password error message: ' + signup.passwordError().text)
+        assert ('at least 6 characters' in signup.passwordError().text)
 
 
+    # Test signup with not matching password and confirm password
+    def test_signup_with_not_matching_password(self):
+        """Test signup with not matching password and confirm password"""
+        log = self.myLogger()
+        signup = SignupPage(self.driver)
+        fake = Faker()
+        log.info("Input data in full name field")
+        signup.fullName().clear()
+        signup.fullName().send_keys(fake.name())
+        log.info("Full Name - " + f"'{signup.fullName().get_attribute('value')}'")
+        signup.companyName().clear()
+        signup.companyName().send_keys(fake.company())
+        log.info("Company Name - " + f"'{signup.companyName().get_attribute('value')}'")
+        signup.phone().clear()
+        signup.phone().send_keys(fake.phone_number())
+        log.info("Phone no - " + f"'{signup.phone().get_attribute('value')}'")
+        signup.email().clear()
+        signup.email().send_keys(fake.email())
+        log.info("Email - " + f"'{signup.email().get_attribute('value')}'")
+        signup.password().clear()
+        signup.password().send_keys(fake.password())
+        log.info("Password - " + f"'{signup.password().get_attribute('value')}'")
+        signup.confirm_password().clear()
+        signup.confirm_password().send_keys(fake.password())
+        log.info("Confirm Password - " + f"'{signup.confirm_password().get_attribute('value')}'")
+        signup.pms().clear()
+        signup.pms().send_keys(fake.company())
+        log.info("PMS - " + f"'{signup.pms().get_attribute('value')}'")
+        signup.agree().click()
+        log.info("Terms accepted")
+        log.info('Submitting signup form')
+        signup.signupSubmit().click()
+        time.sleep(2)
 
-    # Test sign up with invalid email
-
-    # Test sign up with min length password
-
-    # Test signup with not matching password
+        log.info('Password error message: ' + signup.passwordError().text)
+        assert ('Password confirmation does not match' in signup.passwordError().text)
 
     # Test signup with existing email
 
     # Test signup without accepting terms
 
     # Test signup with valid email
-
-
-
-
-
-

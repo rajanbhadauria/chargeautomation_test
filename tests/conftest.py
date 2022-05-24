@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 from selenium import webdriver
+import chromedriver_binary  # Adds chromedriver binary to path
 driver = None
 
 @pytest.fixture(scope='class')

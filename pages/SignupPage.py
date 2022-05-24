@@ -33,14 +33,26 @@ class SignupPage:
     def password(self):
         return self.driver.find_element(By.ID, "password")
 
+    def passwordError(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='lock']//div[contains(@class, 'group')][1]//span[contains(@class,'invalid-feedback')]/span")
+
     def confirm_password(self):
         return self.driver.find_element(By.ID, "password-confirm")
+
+    def confirmPasswordError(self):
+        return self.driver.find_element(By.XPATH,
+                                        "//div[@class='lock']//div[contains(@class, 'group')][2]//span[contains(@class,'invalid-feedback')]/span")
 
     def pms(self):
         return self.driver.find_element(By.XPATH, "//div[@class='network']//input")
 
     def agree(self):
         return self.driver.find_element(By.XPATH, "//span[@class='checkmark']")
+
+    def agreeError(self):
+        return self.driver.find_element(By.XPATH, "//div[contains( @class , 'agree-error')][1]//span[contains( @ class, 'invalid-feedback')]/span")
+
+
 
     def signupSubmit(self):
         return self.driver.find_element(By.ID, "signupbtn")
