@@ -46,13 +46,14 @@ class SignupPage:
     def pms(self):
         return self.driver.find_element(By.XPATH, "//div[@class='network']//input")
 
+    def pmsError(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='network']//span[contains(@class, 'invalid-feedback')]/span")
+
     def agree(self):
         return self.driver.find_element(By.XPATH, "//span[@class='checkmark']")
 
     def agreeError(self):
         return self.driver.find_element(By.XPATH, "//div[contains( @class , 'agree-error')][1]//span[contains( @ class, 'invalid-feedback')]/span")
-
-
 
     def signupSubmit(self):
         return self.driver.find_element(By.ID, "signupbtn")
