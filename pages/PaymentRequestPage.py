@@ -28,3 +28,12 @@ class PaymentRequestPage:
 
     def amountError(self):
         return self.driver.find_element(By.XPATH, "//input[@id= 'transactionAmount']/parent::div/parent::div/small/strong")
+
+    def moreSettingsLink(self):
+        return self.driver.find_element(By.XPATH, "//a[contains(@href, '#transactionSettings')]")
+
+    def scheduleDateInput(self):
+        return self.driver.find_element(By.ID, 'date_1-input')
+
+    def scheduleDay(self):
+        self.driver.find_element(By.XPATH, "//button[contains(@class, 'datepicker-day') and contains(@class, 'enable')]")

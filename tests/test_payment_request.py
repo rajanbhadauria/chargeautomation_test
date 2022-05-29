@@ -1,6 +1,7 @@
 import time
 
 import pytest
+from faker import Faker
 
 from pages.HomePage import HomePage
 from pages.LoginPage import LoginPage
@@ -70,9 +71,84 @@ class TestPaymentRequest(BaseClass):
         assert ('valid email address' in paymentRequestPage.emailError().text)
         log.info("Email validation message " + f"'{paymentRequestPage.amountError().text}'")
         assert ('The amount must be at least' in paymentRequestPage.amountError().text)
+
     # Test create payment request with special characters
+    def test_create_payment_request_with_special(self):
+        """Test create payment request with special characters"""
+        log = self.myLogger()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+
+        log.info("Filling email ")
+        paymentRequestPage.emailInput().clear()
+        paymentRequestPage.emailInput().send_keys('--@*&$#(*)')
+        log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
+
+        log.info("Filling amount ")
+        paymentRequestPage.amountInput().clear()
+        paymentRequestPage.amountInput().send_keys('++')
+        log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
+
+        log.info("Submit form")
+        paymentRequestPage.sendPaymentRequest().click()
+        time.sleep(2)
+        log.info("Email validation message " + f"'{paymentRequestPage.emailError().text}'")
+        assert ('valid email address' in paymentRequestPage.emailError().text)
+        log.info("Email validation message " + f"'{paymentRequestPage.amountError().text}'")
+        assert ('The amount field is required' in paymentRequestPage.amountError().text)
+
     # Test create payment request with JS and PHP code
+    def test_create_payment_request_with_js_php(self):
+        """Test create payment request with JS and PHP code"""
+        log = self.myLogger()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+
+        log.info("Filling email ")
+        paymentRequestPage.emailInput().clear()
+        paymentRequestPage.emailInput().send_keys('<?php die();?>')
+        log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
+
+        log.info("Filling amount ")
+        paymentRequestPage.amountInput().clear()
+        paymentRequestPage.amountInput().send_keys('<script>alert()</script>')
+        log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
+
+        log.info("Submit form")
+        paymentRequestPage.sendPaymentRequest().click()
+        time.sleep(2)
+        log.info("Email validation message " + f"'{paymentRequestPage.emailError().text}'")
+        assert ('valid email address' in paymentRequestPage.emailError().text)
+        log.info("Email validation message " + f"'{paymentRequestPage.amountError().text}'")
+        assert ('The amount field is required' in paymentRequestPage.amountError().text)
+
     # Test create payment request with scheduled date
+    def test_create_payment_request_with_scheduled_date(self):
+        """Test create payment request with scheduled date"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+
+        log.info("Filling email ")
+        paymentRequestPage.emailInput().clear()
+        paymentRequestPage.emailInput().send_keys(fake.email())
+        log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
+
+        log.info("Filling amount ")
+        paymentRequestPage.amountInput().clear()
+        paymentRequestPage.amountInput().send_keys(fake.pyint())
+        log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
+
+        log.info("Opening more settings")
+        paymentRequestPage.moreSettingsLink().click()
+
+        log.info("Opening scheduled date calendar")
+        paymentRequestPage.scheduleDateInput().click()
+
+        log.info("Submit form")
+        #paymentRequestPage.sendPaymentRequest().click()
+        time.sleep(16)
+
+        log.info("Email validation message " + f"'{paymentRequestPage.emailError().text}'")
+
     # Test create payment request with expiry date
     # Test create payment request with charge back protection
     # Test create payment request with long text in description and terms input
