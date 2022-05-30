@@ -1,4 +1,4 @@
-import time
+import time,  datetime
 
 import pytest
 from faker import Faker
@@ -141,7 +141,11 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.moreSettingsLink().click()
 
         log.info("Opening scheduled date calendar")
-        paymentRequestPage.scheduleDateInput().click()
+        shchedule_obj = self.time_obj(10)
+        log.info("Scheduled date and time " + f"'{shchedule_obj.strftime('%a, %B %d, %Y %-I:%M %p')}'")
+        paymentRequestPage.scheduleDateInput().send_keys("")
+        paymentRequestPage.scheduleDateInput().send_keys(shchedule_obj.strftime('%a, %B %d, %Y %-I:%M %p'))
+
 
         log.info("Submit form")
         #paymentRequestPage.sendPaymentRequest().click()

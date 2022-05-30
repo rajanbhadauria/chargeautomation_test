@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timedelta
 
 import pytest
 from selenium.webdriver.common.by import By
@@ -20,3 +21,6 @@ class BaseClass:
 
     def verify_element_presence(self, finder, text):
         return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(By.finder, text))
+
+    def time_obj(self, add_mins=0):
+        return datetime.now() + timedelta(minutes=add_mins)

@@ -3,8 +3,10 @@ from pathlib import Path
 
 import pytest
 from selenium import webdriver
-import chromedriver_binary  # Adds chromedriver binary to path
+
+# import chromedriver_binary  # Adds chromedriver binary to path
 driver = None
+
 
 @pytest.fixture(scope='class')
 def setup(request):
@@ -17,19 +19,21 @@ def setup(request):
     yield
     driver.close()
 
+
 @pytest.hookimpl(tryfirst=True)
 def pytest_configure(config):
     # set custom options only if none are provided from command line
     now = datetime.now()
     # create report target dir
     reports_dir = Path('reports')
-    #reports_dir.mkdir(parents=True, exist_ok=True)
+    # reports_dir.mkdir(parents=True, exist_ok=True)
     # custom report file
-    #report = reports_dir / f"report_{now.strftime('%H%M')}.html"
+    # report = reports_dir / f"report_{now.strftime('%H%M')}.html"
     report = reports_dir / f"report.html"
     # adjust plugin options
     config.option.htmlpath = report
     config.option.self_contained_html = True
+
 
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
@@ -62,5 +66,9 @@ def pytest_runtest_makereport(item):
 
 
 def _capture_screenshot(name):
-    driver.get_screenshot_as_file('reports/'+name)
+    driver.get_screenshot_as_file('reports/' + name)
 
+
+@pytest.fixture()
+def loginData():
+    return {'email': 'pgtest@yopmail.com', 'password': 'Rajan@123'}
