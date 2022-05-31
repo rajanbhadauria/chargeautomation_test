@@ -35,5 +35,16 @@ class PaymentRequestPage:
     def scheduleDateInput(self):
         return self.driver.find_element(By.ID, 'date_1-input')
 
-    def scheduleDay(self):
-        self.driver.find_element(By.XPATH, "//button[contains(@class, 'datepicker-day') and contains(@class, 'enable')]")
+    def scheduleDay(self, day):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'datepicker-days')]/button/span[contains(@class, 'datepicker-day-text') and text()="+str(day)+"]/parent::button")
+
+    def scheduleHour(self, hour):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class,'time-picker-column')][1]/div/button/span[contains(@class, 'time-picker-column-item-text') and text()="+str(hour)+"][1]")
+
+    def scheduleMin(self, min):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class,'time-picker-column')][2]/div/button/span[contains(@class, 'time-picker-column-item-text') and text()="+str(min)+"][1]")
+
+    def selectScheduleDateButton(self):
+        return self.driver.find_element(By.XPATH, "//button[contains(@class, 'datepicker-button validate')][1]")
+
+

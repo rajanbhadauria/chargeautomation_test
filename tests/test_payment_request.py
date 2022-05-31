@@ -68,7 +68,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Email validation message " + f"'{paymentRequestPage.emailError().text}'")
-        assert ('valid email address' in paymentRequestPage.emailError().text)
+        assert ('The email format is invalid' in paymentRequestPage.emailError().text)
         log.info("Email validation message " + f"'{paymentRequestPage.amountError().text}'")
         assert ('The amount must be at least' in paymentRequestPage.amountError().text)
 
@@ -92,7 +92,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Email validation message " + f"'{paymentRequestPage.emailError().text}'")
-        assert ('valid email address' in paymentRequestPage.emailError().text)
+        assert ('The email format is invalid' in paymentRequestPage.emailError().text)
         log.info("Email validation message " + f"'{paymentRequestPage.amountError().text}'")
         assert ('The amount field is required' in paymentRequestPage.amountError().text)
 
@@ -116,7 +116,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Email validation message " + f"'{paymentRequestPage.emailError().text}'")
-        assert ('valid email address' in paymentRequestPage.emailError().text)
+        assert ('The email format is invalid' in paymentRequestPage.emailError().text)
         log.info("Email validation message " + f"'{paymentRequestPage.amountError().text}'")
         assert ('The amount field is required' in paymentRequestPage.amountError().text)
 
@@ -147,15 +147,19 @@ class TestPaymentRequest(BaseClass):
         min = int(shchedule_obj.strftime('%M'))
         #log.info("Scheduled date and time " + f"'{shchedule_obj.strftime('%a, %B %d, %Y %I:%M %p')}'")
         log.info("Scheduled day, hour and min " + f"'{shchedule_obj.strftime('%d, %H:%M')}'")
-        paymentRequestPage.scheduleDateInput().send_keys("")
-        paymentRequestPage.scheduleDateInput().send_keys(shchedule_obj.strftime('%a, %B %d, %Y %I:%M %p'))
+        paymentRequestPage.scheduleDateInput().click()
+        paymentRequestPage.scheduleDay(day).click()
+        paymentRequestPage.scheduleHour(hour).click()
+        paymentRequestPage.scheduleMin(min).click()
 
+        paymentRequestPage.selectScheduleDateButton().click()
+
+        log.info("Selected schedule date is - " + paymentRequestPage.scheduleDateInput().get_attribute('value'))
 
         log.info("Submit form")
         #paymentRequestPage.sendPaymentRequest().click()
         time.sleep(16)
 
-        log.info("Email validation message " + f"'{paymentRequestPage.emailError().text}'")
 
     # Test create payment request with expiry date
     # Test create payment request with charge back protection
