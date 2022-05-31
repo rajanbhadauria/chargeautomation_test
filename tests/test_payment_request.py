@@ -142,9 +142,13 @@ class TestPaymentRequest(BaseClass):
 
         log.info("Opening scheduled date calendar")
         shchedule_obj = self.time_obj(10)
-        log.info("Scheduled date and time " + f"'{shchedule_obj.strftime('%a, %B %d, %Y %-I:%M %p')}'")
+        day = int(shchedule_obj.strftime('%d'))
+        hour = int(shchedule_obj.strftime('%H'))
+        min = int(shchedule_obj.strftime('%M'))
+        #log.info("Scheduled date and time " + f"'{shchedule_obj.strftime('%a, %B %d, %Y %I:%M %p')}'")
+        log.info("Scheduled day, hour and min " + f"'{shchedule_obj.strftime('%d, %H:%M')}'")
         paymentRequestPage.scheduleDateInput().send_keys("")
-        paymentRequestPage.scheduleDateInput().send_keys(shchedule_obj.strftime('%a, %B %d, %Y %-I:%M %p'))
+        paymentRequestPage.scheduleDateInput().send_keys(shchedule_obj.strftime('%a, %B %d, %Y %I:%M %p'))
 
 
         log.info("Submit form")
