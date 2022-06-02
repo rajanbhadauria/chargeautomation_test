@@ -1,5 +1,8 @@
 from selenium.webdriver.common.by import By
 
+from utilities.BaseClass import BaseClass
+
+
 class PaymentRequestPage:
 
     def __init__(self, driver):
@@ -46,5 +49,9 @@ class PaymentRequestPage:
 
     def selectScheduleDateButton(self):
         return self.driver.find_element(By.XPATH, "//button[contains(@class, 'datepicker-button validate')][1]")
+
+    def sentLinkSuccessMessage(self):
+        baseClass = BaseClass()
+        return baseClass.verify_element_presence(self.driver, By.XPATH, "//div[@id='paymentLinkSentModal']//h4")
 
 

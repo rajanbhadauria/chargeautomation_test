@@ -153,11 +153,13 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.scheduleMin(min).click()
 
         paymentRequestPage.selectScheduleDateButton().click()
-
         log.info("Selected schedule date is - " + paymentRequestPage.scheduleDateInput().get_attribute('value'))
 
-        log.info("Submit form")
-        #paymentRequestPage.sendPaymentRequest().click()
+        log.info("Submit form using send link")
+        paymentRequestPage.sendPaymentRequest().click()
+        time.sleep(2)
+        log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
+        assert('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
         time.sleep(16)
 
 

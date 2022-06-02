@@ -19,8 +19,8 @@ class BaseClass:
         logger.setLevel(logging.DEBUG)
         return logger
 
-    def verify_element_presence(self, finder, text):
-        return WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(By.finder, text))
+    def verify_element_presence(self, driver, finder, text):
+        return WebDriverWait(driver, 10).until(EC.presence_of_element_located((finder, text)))
 
     def time_obj(self, add_mins=0):
         return datetime.now() + timedelta(minutes=add_mins)
