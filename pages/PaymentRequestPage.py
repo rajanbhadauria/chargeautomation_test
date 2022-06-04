@@ -9,10 +9,14 @@ class PaymentRequestPage:
         self.driver = driver
 
     def paymentRequestLink(self):
-        return self.driver.find_element(By.LINK_TEXT, 'Payment Request')
+        baseClass = BaseClass()
+        return baseClass.verify_element_presence(self.driver, By.LINK_TEXT, 'Payment Request')
+        # return self.driver.find_element(By.LINK_TEXT, 'Payment Request')
 
     def managePaymentRequestLink(self):
-        return self.driver.find_element(By.XPATH, '//a[contains(@href, "payment-requests")]')
+        baseClass = BaseClass()
+        return baseClass.verify_element_presence(self.driver, By.XPATH, '//a[contains(@href, "payment-requests")]')
+        #return self.driver.find_element(By.XPATH, '//a[contains(@href, "payment-requests")]')
 
     def addPaymentRequestLink(self):
         return self.driver.find_element(By.PARTIAL_LINK_TEXT, 'Add New Request')
@@ -28,6 +32,9 @@ class PaymentRequestPage:
 
     def amountInput(self):
         return self.driver.find_element(By.ID, 'transactionAmount')
+
+    def selectCurrency(self):
+        return self.driver.find_element(By.XPATH, "//div[@id='currency-selector']//img")
 
     def amountError(self):
         return self.driver.find_element(By.XPATH, "//input[@id= 'transactionAmount']/parent::div/parent::div/small/strong")
@@ -53,5 +60,25 @@ class PaymentRequestPage:
     def sentLinkSuccessMessage(self):
         baseClass = BaseClass()
         return baseClass.verify_element_presence(self.driver, By.XPATH, "//div[@id='paymentLinkSentModal']//h4")
+
+    def getPaymentRequestLink(self):
+        return self.driver.find_element(By.ID, 'paymentLinkSentModal_linkCopyInput')
+
+    def closeModalBtn(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'modal') and @style!='']// a[@data-dismiss = 'modal']")
+
+    def filterInput(self):
+        return self.driver.find_element(By.ID, "filter-search")
+
+    def findRequestRows(self):
+        return self.driver.find_elements(By.XPATH, "//div[contains(@class, 'payment-request-pane')]")
+
+    def findAmount(self):
+        return self.driver.find_element(By.XPATH, "//span[contains(@class, 'payment-amount-label')]")
+
+    def findEmail(self):
+        return self.driver.find_element(By.XPATH, "//span[contains(@class, 'payment-email-label')]")
+
+
 
 

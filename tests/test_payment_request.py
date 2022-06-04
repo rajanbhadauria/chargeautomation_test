@@ -129,12 +129,14 @@ class TestPaymentRequest(BaseClass):
 
         log.info("Filling email ")
         paymentRequestPage.emailInput().clear()
-        paymentRequestPage.emailInput().send_keys(fake.email())
+        email = fake.email()
+        paymentRequestPage.emailInput().send_keys(email)
         log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
 
         log.info("Filling amount ")
         paymentRequestPage.amountInput().clear()
-        paymentRequestPage.amountInput().send_keys(fake.pyint())
+        amount = fake.pyint()
+        paymentRequestPage.amountInput().send_keys(amount)
         log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
 
         log.info("Opening more settings")
@@ -160,7 +162,51 @@ class TestPaymentRequest(BaseClass):
         time.sleep(2)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
         assert('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
-        time.sleep(16)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeModalBtn().click()
+
+        log.info("Searching request with id - " + requestId)
+        assert (len(self.searchRequestById(requestId)) > 0)
+        time.sleep(2)
+        log.info("Created request found with id - " + requestId)
+
+        log.info("Matching requested email - " + email)
+        email_matched = paymentRequestPage.findEmail().text
+        assert(email_matched == email)
+        log.info("Requested email matched with - " + email_matched)
+
+        currency = paymentRequestPage.selectCurrency().get_attribute('alt')
+        log.info("Matching requested amount - " + currency+str(amount))
+        amount_matched = paymentRequestPage.findAmount().text
+        requested_amount = currency+str(amount);
+        assert (requested_amount == amount_matched)
+        log.info("Requested amount matched with - " + amount_matched)
+
+
+
+    def getRequestKey(self):
+        log = self.myLogger()
+        try:
+            paymentRequestPage = PaymentRequestPage(self.driver)
+            request_link = paymentRequestPage.getPaymentRequestLink().get_attribute('value')
+            log.info("Request url is - "+request_link)
+            link_list = request_link.split("/")
+            log.info("Request id is - " + link_list[-1])
+            return link_list[-1]
+        except Exception as e:
+            log.info("Error in getting request url- " + e)
+
+    def searchRequestById(self, request_id):
+        log = self.myLogger()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        log.info("Entered request id in filter is  - " + request_id)
+        paymentRequestPage.filterInput().send_keys(request_id)
+        time.sleep(2)
+        log.info("Finding request")
+        return paymentRequestPage.findRequestRows()
+
+
+
 
 
     # Test create payment request with expiry date
