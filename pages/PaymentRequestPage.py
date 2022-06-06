@@ -46,16 +46,41 @@ class PaymentRequestPage:
         return self.driver.find_element(By.ID, 'date_1-input')
 
     def scheduleDay(self, day):
-        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'datepicker-days')]/button/span[contains(@class, 'datepicker-day-text') and text()="+str(day)+"]/parent::button")
+        return self.driver.find_element(By.XPATH, "//div[@id='date_1-wrapper']//div[contains(@class, 'datepicker-days')]/button/span[contains(@class, 'datepicker-day-text') and text()="+str(day)+"]/parent::button")
 
     def scheduleHour(self, hour):
-        return self.driver.find_element(By.XPATH, "//div[contains(@class,'time-picker-column')][1]/div/button/span[contains(@class, 'time-picker-column-item-text') and text()="+str(hour)+"][1]")
+        return self.driver.find_element(By.XPATH, "//div[@id='date_1-wrapper']//div[contains(@class,'time-picker-column')][1]/div/button/span[contains(@class, 'time-picker-column-item-text') and text()="+str(hour)+"]")
 
     def scheduleMin(self, min):
-        return self.driver.find_element(By.XPATH, "//div[contains(@class,'time-picker-column')][2]/div/button/span[contains(@class, 'time-picker-column-item-text') and text()="+str(min)+"][1]")
+        return self.driver.find_element(By.XPATH, "//div[@id='date_1-wrapper']//div[contains(@class,'time-picker-column')][2]/div/button/span[contains(@class, 'time-picker-column-item-text') and text()="+str(min)+"]")
+
+    def scheduleDateError(self):
+        return self.driver.find_element(By.XPATH, "//div[@id= 'date_1-wrapper']//parent::div/parent::div/small")
+
+    def expiryDay(self, day):
+        return self.driver.find_element(By.XPATH, "//div[@id='date_2-picker-container-DatePicker']//div[contains(@class, 'datepicker-days')]/button/span[contains(@class, 'datepicker-day-text') and text()="+str(day)+"]/parent::button[1]")
+
+    def expiryHour(self, hour):
+        return self.driver.find_element(By.XPATH, "//div[@id='date_2-wrapper']//div[contains(@class,'time-picker-column-hours')]//button/span[contains(@class, 'time-picker-column-item-text') and text()="+str(hour)+"]/parent::button[1]")
+
+    def expiryMin(self, min):
+        return self.driver.find_element(By.XPATH, "//div[@id='date_2-wrapper']//div[contains(@class,'time-picker-column-minutes')]//button/span[contains(@class,'time-picker-column-item-text') and text()="+str(min)+"][1]/parent::button[1]")
+
+    def expiryDateError(self):
+        return self.driver.find_element(By.XPATH, "//div[@id= 'date_2-wrapper']//parent::div/parent::div/small")
+
 
     def selectScheduleDateButton(self):
         return self.driver.find_element(By.XPATH, "//button[contains(@class, 'datepicker-button validate')][1]")
+
+    def closeRequestModalButton(self):
+        return self.driver.find_element(By.ID, "closeAddEditPaymentRequestButton")
+
+    def selectExpiryDateButton(self):
+        return self.driver.find_element(By.XPATH, "//div[@id='date_2-wrapper']//button[contains(@class, 'validate')]")
+
+    def expiryDateInput(self):
+        return self.driver.find_element(By.ID, 'date_2-input')
 
     def sentLinkSuccessMessage(self):
         baseClass = BaseClass()
