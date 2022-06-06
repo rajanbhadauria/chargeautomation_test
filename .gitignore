@@ -2,3 +2,5 @@ reports/
 venv/
 .idea/
 /logger.log
+/utilities/__pycache__
+/tests/__pycache__/
