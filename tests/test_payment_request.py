@@ -415,7 +415,79 @@ class TestPaymentRequest(BaseClass):
         except NoSuchElementException:
             log.info("Shield icon not found")
             assert False
+
     # Test create payment request with long text in description and terms input
+    def test_create_payment_request_with_long_desc_and_terms(self):
+        """Test create payment request with long text in description and terms input"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        paymentRequestPage.filterInput().clear()
+        paymentRequestPage.addPaymentRequestLink().click()
+        log.info("Filling email ")
+        paymentRequestPage.emailInput().clear()
+        email = fake.email()
+        paymentRequestPage.emailInput().send_keys(email)
+        log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
+
+        log.info("Filling amount ")
+        paymentRequestPage.amountInput().clear()
+        amount = 25
+        paymentRequestPage.amountInput().send_keys(amount)
+        log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
+
+        dummy_text = ""
+        for _ in range(5):
+            dummy_text += fake.paragraph(nb_sentences=5)
+
+        log.info("Filling description data")
+        paymentRequestPage.descriptionInput().send_keys(dummy_text)
+        log.info("Description text is - "+paymentRequestPage.descriptionInput().get_attribute('value'))
+
+        log.info("Opening more settings")
+        # paymentRequestPage.moreSettingsLink().click()
+
+        log.info("Filling term data")
+        paymentRequestPage.termsInput().send_keys(dummy_text)
+        log.info("Terms text is - " + paymentRequestPage.termsInput().get_attribute('value'))
+
+        log.info("Submit form using send link")
+        paymentRequestPage.sendPaymentRequest().click()
+        time.sleep(2)
+        log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeModalBtn().click()
+
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+        assert (len(self.searchRequestById(requestId)) > 0)
+        log.info("Created request found with id - " + requestId)
+
+        log.info("Matching requested email - " + email)
+        email_matched = paymentRequestPage.findEmail().text
+        assert (email_matched == email)
+        log.info("Requested email matched with - " + email_matched)
+
+        currency = paymentRequestPage.selectCurrency().get_attribute('alt')
+        log.info("Matching requested amount - " + currency + str(amount))
+        amount_matched = paymentRequestPage.findAmount().text
+        requested_amount = currency + str(amount)
+        assert (requested_amount == amount_matched)
+        log.info("Requested amount matched with - " + amount_matched)
+
+        log.info("Expanding row")
+        paymentRequestPage.toggleRowButton().click()
+        time.sleep(2)
+
+        log.info("Matching description")
+        assert(paymentRequestPage.findDescription().text in dummy_text)
+        log.info('Found the description is - '+paymentRequestPage.findDescription().text)
+
+        log.info("Matching terms")
+        assert (paymentRequestPage.findTerms().text in dummy_text)
+        log.info('Found the terms is - ' + paymentRequestPage.findTerms().text)
+
     # Test create payment request with send payment link
     # Test create payment request with create payment link
     # Test create payment request with charge now link

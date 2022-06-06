@@ -57,6 +57,21 @@ class PaymentRequestPage:
     def scheduleDateError(self):
         return self.driver.find_element(By.XPATH, "//div[@id= 'date_1-wrapper']//parent::div/parent::div/small")
 
+    def descriptionInput(self):
+        return self.driver.find_element(By.ID, "transactionDescription")
+
+    def termsInput(self):
+        return self.driver.find_element(By.ID, "transactionTerms")
+
+    def toggleRowButton(self):
+        return self.driver.find_element(By.XPATH, "//a[contains(@class, 'card-collapse')]")
+
+    def findDescription(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'collapse')]//div[@class='row form-row']/div[@class = 'col-12 col-md-5']//dd")
+
+    def findTerms(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'collapse')]//div[@class='row form-row']/div[@class = 'col-12 col-md-4']//dd")
+
     def expiryDay(self, day):
         return self.driver.find_element(By.XPATH, "//div[@id='date_2-picker-container-DatePicker']//div[contains(@class, 'datepicker-days')]/button/span[contains(@class, 'datepicker-day-text') and text()="+str(day)+"]/parent::button[1]")
 
