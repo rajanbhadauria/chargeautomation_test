@@ -73,6 +73,9 @@ class PaymentRequestPage:
     def selectScheduleDateButton(self):
         return self.driver.find_element(By.XPATH, "//button[contains(@class, 'datepicker-button validate')][1]")
 
+    def onChargeBackButton(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='checkbox-toggle checkbox-choice']/label")
+
     def closeRequestModalButton(self):
         return self.driver.find_element(By.ID, "closeAddEditPaymentRequestButton")
 
@@ -103,6 +106,9 @@ class PaymentRequestPage:
 
     def findEmail(self):
         return self.driver.find_element(By.XPATH, "//span[contains(@class, 'payment-email-label')]")
+
+    def findShieldIcon(self):
+        return self.driver.find_element(By.XPATH, "//span/i[@class='fas fa-shield-alt text-muted']")
 
 
 

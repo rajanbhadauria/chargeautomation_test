@@ -42,6 +42,7 @@ class TestLogin(BaseClass):
         login_page.passwordInput().clear()
         log.info('password: ' + login_page.passwordInput().get_attribute('value'))
         login_page.loginSubmitBtn().click()
+        time.sleep(2)
         log.info('Email error message: ' + login_page.emailError().text)
         assert(login_page.emailError().text in 'The email must be a valid email address.')
         log.info('Password error message: ' + login_page.passwordError().text)

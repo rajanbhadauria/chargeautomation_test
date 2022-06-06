@@ -2,6 +2,7 @@ import time,  datetime
 
 import pytest
 from faker import Faker
+from selenium.common.exceptions import NoSuchElementException
 
 from pages.HomePage import HomePage
 from pages.LoginPage import LoginPage
@@ -240,6 +241,7 @@ class TestPaymentRequest(BaseClass):
         log.info("Selected expiry date is - " + paymentRequestPage.expiryDateInput().get_attribute('value'))
 
         log.info("Submit form using send link")
+        time.sleep(1)
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
@@ -353,8 +355,66 @@ class TestPaymentRequest(BaseClass):
         time.sleep(2)
 
         assert ('Expiry date must be a future date' in paymentRequestPage.expiryDateError().text)
+        paymentRequestPage.closeRequestModalButton().click()
 
     # Test create payment request with charge back protection
+    def test_create_payment_request_with_chargeback(self):
+        """Test create payment request with charge back protection"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        paymentRequestPage.addPaymentRequestLink().click()
+        log.info("Filling email ")
+        paymentRequestPage.emailInput().clear()
+        email = fake.email()
+        paymentRequestPage.emailInput().send_keys(email)
+        log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
+
+        log.info("Filling amount ")
+        paymentRequestPage.amountInput().clear()
+        amount = fake.pyint()
+        paymentRequestPage.amountInput().send_keys(amount)
+        log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
+
+        log.info("Opening more settings")
+        #paymentRequestPage.moreSettingsLink().click()
+
+        log.info("Selecting charge back protection on")
+        paymentRequestPage.onChargeBackButton().click()
+
+        log.info("Submit form using send link")
+        paymentRequestPage.sendPaymentRequest().click()
+        time.sleep(2)
+        log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeModalBtn().click()
+
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+        assert (len(self.searchRequestById(requestId)) > 0)
+        log.info("Created request found with id - " + requestId)
+
+        log.info("Matching requested email - " + email)
+        email_matched = paymentRequestPage.findEmail().text
+        assert (email_matched == email)
+        log.info("Requested email matched with - " + email_matched)
+
+        currency = paymentRequestPage.selectCurrency().get_attribute('alt')
+        log.info("Matching requested amount - " + currency + str(amount))
+        amount_matched = paymentRequestPage.findAmount().text
+        requested_amount = currency + str(amount)
+        assert (requested_amount == amount_matched)
+        log.info("Requested amount matched with - " + amount_matched)
+
+        log.info("Searching shield icon")
+        try:
+            paymentRequestPage.findShieldIcon()
+            log.info("Shield icon found")
+            assert True
+        except NoSuchElementException:
+            log.info("Shield icon not found")
+            assert False
     # Test create payment request with long text in description and terms input
     # Test create payment request with send payment link
     # Test create payment request with create payment link
