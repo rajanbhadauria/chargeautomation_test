@@ -488,7 +488,55 @@ class TestPaymentRequest(BaseClass):
         assert (paymentRequestPage.findTerms().text in dummy_text)
         log.info('Found the terms is - ' + paymentRequestPage.findTerms().text)
 
-    # Test create payment request with send payment link
+    # Test create payment request with create payment link
+    def test_payment_request_create_payment_link(self):
+        """Test create payment request with create payment link"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        paymentRequestPage.filterInput().clear()
+        paymentRequestPage.addPaymentRequestLink().click()
+        time.sleep(2)
+        log.info("Filling email ")
+        paymentRequestPage.emailInput().clear()
+        email = fake.email()
+        paymentRequestPage.emailInput().send_keys(email)
+        log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
+
+        log.info("Filling amount ")
+        paymentRequestPage.amountInput().clear()
+        amount = fake.pyint()
+        paymentRequestPage.amountInput().send_keys(amount)
+        log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
+
+        log.info("Opening expand menu link")
+        paymentRequestPage.menuListButton().click()
+
+        log.info("Submit form using create payment link")
+        paymentRequestPage.createPaymentLink().click()
+        time.sleep(2)
+        log.info("Success Message " + paymentRequestPage.createLinkSuccessMessage().text)
+        assert ('Payment link successfully created' in paymentRequestPage.createLinkSuccessMessage().text)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeSentLinkModalBtn().click()
+
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+        assert (len(self.searchRequestById(requestId)) > 0)
+
+        log.info("Created request found with id - " + requestId)
+
+        log.info("Matching requested email - " + email)
+        email_matched = paymentRequestPage.findEmail().text
+        assert (email_matched == email)
+        log.info("Requested email matched with - " + email_matched)
+
+        currency = paymentRequestPage.selectCurrency().get_attribute('alt')
+        log.info("Matching requested amount - " + currency + str(amount))
+        amount_matched = paymentRequestPage.findAmount().text
+        requested_amount = currency + str(amount)
+        assert (requested_amount == amount_matched)
+        log.info("Requested amount matched with - " + amount_matched)
     # Test create payment request with create payment link
     # Test create payment request with charge now link
     # Test create payment request with schedule payment link

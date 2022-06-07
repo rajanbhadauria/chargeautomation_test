@@ -24,6 +24,12 @@ class PaymentRequestPage:
     def sendPaymentRequest(self):
         return self.driver.find_element(By.XPATH, "//div[contains(@class, 'dropup')]/button[contains(@class, 'pl-3')]")
 
+    def menuListButton(self):
+        return self.driver.find_element(By.XPATH, "//button[contains(@class, 'dropdown-toggle-split')]")
+
+    def createPaymentLink(self):
+        return self.driver.find_element(By.XPATH, '//div[contains(@class, "dropdown-menu-right show")]/a[1]')
+
     def emailInput(self):
         return self.driver.find_element(By.ID, 'transactionContact')
 
@@ -104,11 +110,18 @@ class PaymentRequestPage:
         baseClass = BaseClass()
         return baseClass.verify_element_presence(self.driver, By.XPATH, "//div[@id='paymentLinkSentModal']//h4")
 
+    def createLinkSuccessMessage(self):
+        baseClass = BaseClass()
+        return baseClass.verify_element_presence(self.driver, By.XPATH, "//div[@id='paymentLinkCreatedModal']//h4")
+
     def getPaymentRequestLink(self):
         return self.driver.find_element(By.ID, 'paymentLinkSentModal_linkCopyInput')
 
     def closeModalBtn(self):
         return self.driver.find_element(By.XPATH, "//div[contains(@class, 'modal') and @style!='']// a[@data-dismiss = 'modal']")
+
+    def closeSentLinkModalBtn(self):
+        return self.driver.find_element(By.ID, 'close_sentLinkModal');
 
     def filterInput(self):
         return self.driver.find_element(By.ID, "filter-search")
