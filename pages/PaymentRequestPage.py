@@ -33,6 +33,9 @@ class PaymentRequestPage:
     def chargePaymentLink(self):
         return self.driver.find_element(By.XPATH, '//div[contains(@class, "dropdown-menu-right show")]/a[2]')
 
+    def scheduleChargeLink(self):
+        return self.driver.find_element(By.XPATH, '//div[contains(@class, "dropdown-menu-right show")]/a[3]')
+
     def selectPaymentMethod(self):
         return self.driver.find_elements(By.XPATH, "//select[@id='chargePaymentMethod']/option")
 
@@ -64,6 +67,12 @@ class PaymentRequestPage:
 
     def paymentStatusLabel(self):
         return self.driver.find_element(By.XPATH, "//span[@class='badge badge-success']")
+
+    def fullNameError(self):
+        return self.driver.find_element(By.XPATH, "//input[@id='full_name']/following-sibling::span")
+
+    def scheduleDateError(self):
+        return self.driver.find_element(By.XPATH, "//small")
 
     def emailInput(self):
         return self.driver.find_element(By.ID, 'transactionContact')

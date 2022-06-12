@@ -607,12 +607,116 @@ class TestPaymentRequest(BaseClass):
         requested_amount = currency + str(amount)
         assert (requested_amount == amount_matched)
         log.info("Requested amount matched with - " + amount_matched)
-
         log.info("Payment status is " + paymentRequestPage.paymentStatusLabel().text)
         assert ('Paid' in paymentRequestPage.paymentStatusLabel().text)
 
+    # Test create payment request with charge now payment link without adding card
+    def test_payment_request_charge_now_link_without_card(self):
+        """Test create payment request with charge now payment link without adding card"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        paymentRequestPage.filterInput().clear()
+        paymentRequestPage.addPaymentRequestLink().click()
+        time.sleep(2)
+        log.info("Filling email ")
+        paymentRequestPage.emailInput().clear()
+        email = fake.email()
+        paymentRequestPage.emailInput().send_keys(email)
+        log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
+
+        log.info("Filling amount ")
+        paymentRequestPage.amountInput().clear()
+        amount = fake.pyint()
+        paymentRequestPage.amountInput().send_keys(amount)
+        log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
+
+        log.info("Opening expand menu link")
+        paymentRequestPage.menuListButton().click()
+
+        log.info("Submit form using charge now link")
+        paymentRequestPage.chargePaymentLink().click()
+        time.sleep(2)
+        log.info("Charging now")
+        paymentRequestPage.chargeNowBtn().click()
+
+        fullname = paymentRequestPage.fullNameError().text;
+        log.info("Error Message - " + fullname)
+        assert ('Please enter name on card' in fullname)
 
     # Test create payment request with schedule payment link
+    def test_payment_request_schedule_charge_link(self):
+        """Test create payment request with schedule charge link"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        paymentRequestPage.filterInput().clear()
+        paymentRequestPage.addPaymentRequestLink().click()
+        time.sleep(2)
+        log.info("Filling email ")
+        paymentRequestPage.emailInput().clear()
+        email = fake.email()
+        paymentRequestPage.emailInput().send_keys(email)
+        log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
+
+        log.info("Filling amount ")
+        paymentRequestPage.amountInput().clear()
+        amount = fake.pyint()
+        paymentRequestPage.amountInput().send_keys(amount)
+        log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
+
+        log.info("Opening expand menu link")
+        paymentRequestPage.menuListButton().click()
+
+        log.info("Submit form using schedule charge link")
+        paymentRequestPage.scheduleChargeLink().click()
+        time.sleep(2)
+
+        scheduleDateError = paymentRequestPage.scheduleDateError().text
+        log.info("Schedule Date error - "+scheduleDateError)
+        assert('You need to select date and time to schedule payment' in scheduleDateError)
+
+        log.info("Opening scheduled date calendar")
+        shchedule_obj = self.time_obj(10)
+        day = int(shchedule_obj.strftime('%d'))
+        hour = int(shchedule_obj.strftime('%H'))
+        min = int(shchedule_obj.strftime('%M'))
+        # log.info("Scheduled date and time " + f"'{shchedule_obj.strftime('%a, %B %d, %Y %I:%M %p')}'")
+        log.info("Scheduled day, hour and min " + f"'{shchedule_obj.strftime('%d, %H:%M')}'")
+        paymentRequestPage.scheduleDateInput().click()
+        time.sleep(1)
+        paymentRequestPage.scheduleDay(day).click()
+        paymentRequestPage.scheduleHour(hour).click()
+        paymentRequestPage.scheduleMin(min).click()
+
+        paymentRequestPage.selectScheduleDateButton().click()
+        log.info("Selected schedule date is - " + paymentRequestPage.scheduleDateInput().get_attribute('value'))
+        time.sleep(2)
+        log.info("Submit form using send link")
+        paymentRequestPage.sendPaymentRequest().click()
+        time.sleep(2)
+        log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeModalBtn().click()
+
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+        assert (len(self.searchRequestById(requestId)) > 0)
+
+        log.info("Created request found with id - " + requestId)
+
+        log.info("Matching requested email - " + email)
+        email_matched = paymentRequestPage.findEmail().text
+        assert (email_matched == email)
+        log.info("Requested email matched with - " + email_matched)
+
+        currency = paymentRequestPage.selectCurrency().get_attribute('alt')
+        log.info("Matching requested amount - " + currency + str(amount))
+        amount_matched = paymentRequestPage.findAmount().text
+        requested_amount = currency + str(amount)
+        assert (requested_amount == amount_matched)
+        log.info("Requested amount matched with - " + amount_matched)
 
     def getRequestKey(self):
         log = self.myLogger()
