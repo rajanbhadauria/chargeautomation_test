@@ -30,6 +30,41 @@ class PaymentRequestPage:
     def createPaymentLink(self):
         return self.driver.find_element(By.XPATH, '//div[contains(@class, "dropdown-menu-right show")]/a[1]')
 
+    def chargePaymentLink(self):
+        return self.driver.find_element(By.XPATH, '//div[contains(@class, "dropdown-menu-right show")]/a[2]')
+
+    def selectPaymentMethod(self):
+        return self.driver.find_elements(By.XPATH, "//select[@id='chargePaymentMethod']/option")
+
+    def addPaymentMethod(self):
+        return self.driver.find_element(By.XPATH, "//a[@href='#newPaymentMethod']")
+
+    def nameOnCard(self):
+        return self.driver.find_element(By.ID, "full_name")
+
+    # def stripeIframe(self):
+    #     return self.driver.find_element(By.XPATH, "//div[@id='card-element']//iframe")
+
+    def addCard(self, card_data):
+        iframe = self.driver.find_element(By.XPATH, "//div[@id='card-element']//iframe")
+        self.driver.switch_to.frame(iframe)
+        self.driver.find_element(By.NAME, 'cardnumber').send_keys(card_data)
+        #self.driver.switch_to.parent_frame()
+        #self.driver.switch_to.frame(self.driver.find_element(By.ID, "paymentChargeModal"))
+
+    def backToMainContent(self):
+        self.driver.switch_to.default_content()
+
+    def chargeNowBtn(self):
+        return self.driver.find_element(By.XPATH, "//div[@id='paymentChargeModal']//a[contains(@class, 'btn-primary')]")
+
+    def paymentSuccessMessage(self):
+        baseClass = BaseClass()
+        return baseClass.verify_element_presence(self.driver, By.XPATH, "//div[@class='toast toast-success']/div")
+
+    def paymentStatusLabel(self):
+        return self.driver.find_element(By.XPATH, "//span[@class='badge badge-success']")
+
     def emailInput(self):
         return self.driver.find_element(By.ID, 'transactionContact')
 

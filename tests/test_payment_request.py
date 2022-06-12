@@ -2,7 +2,7 @@ import time,  datetime
 
 import pytest
 from faker import Faker
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
 
 from pages.HomePage import HomePage
 from pages.LoginPage import LoginPage
@@ -537,8 +537,81 @@ class TestPaymentRequest(BaseClass):
         requested_amount = currency + str(amount)
         assert (requested_amount == amount_matched)
         log.info("Requested amount matched with - " + amount_matched)
-    # Test create payment request with create payment link
-    # Test create payment request with charge now link
+
+    # Test create payment request with charge now payment link
+    def test_payment_request_charge_now_link(self):
+        """Test create payment request with charge now payment link"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        paymentRequestPage.filterInput().clear()
+        paymentRequestPage.addPaymentRequestLink().click()
+        time.sleep(2)
+        log.info("Filling email ")
+        paymentRequestPage.emailInput().clear()
+        email = fake.email()
+        paymentRequestPage.emailInput().send_keys(email)
+        log.info("Email input data - " + f"'{paymentRequestPage.emailInput().get_attribute('value')}'")
+
+        log.info("Filling amount ")
+        paymentRequestPage.amountInput().clear()
+        amount = fake.pyint()
+        paymentRequestPage.amountInput().send_keys(amount)
+        log.info("Amount input data - " + f"'{paymentRequestPage.amountInput().get_attribute('value')}'")
+
+        log.info("Opening expand menu link")
+        paymentRequestPage.menuListButton().click()
+
+        log.info("Submit form using charge now link")
+        paymentRequestPage.chargePaymentLink().click()
+        time.sleep(2)
+
+        try:
+            log.info("Clicking to add new credit card link")
+            paymentRequestPage.addPaymentRequestLink().click()
+        except WebDriverException:
+            log.info("Add card link is not exists")
+            pass
+        name = fake.name()
+        log.info("Adding Name on card " + name)
+        paymentRequestPage.nameOnCard().send_keys(name)
+
+        log.info("Adding card - 4242424242424242 12/25 123 55555")
+        paymentRequestPage.addCard("4242424242424242122512355555")
+
+        time.sleep(2)
+        self.driver.switch_to.default_content()
+        log.info("Charging now")
+        paymentRequestPage.chargeNowBtn().click()
+        time.sleep(2)
+
+        successMessage = paymentRequestPage.paymentSuccessMessage().text;
+        log.info("Success Message - " + successMessage)
+        assert ('Payment successfully charged' in successMessage)
+
+        requestId = self.getRequestKey()
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+        assert (len(self.searchRequestById(requestId)) > 0)
+
+        log.info("Created request found with id - " + requestId)
+
+        log.info("Matching requested email - " + email)
+        email_matched = paymentRequestPage.findEmail().text
+        assert (email_matched == email)
+        log.info("Requested email matched with - " + email_matched)
+
+        currency = paymentRequestPage.selectCurrency().get_attribute('alt')
+        log.info("Matching requested amount - " + currency + str(amount))
+        amount_matched = paymentRequestPage.findAmount().text
+        requested_amount = currency + str(amount)
+        assert (requested_amount == amount_matched)
+        log.info("Requested amount matched with - " + amount_matched)
+
+        log.info("Payment status is " + paymentRequestPage.paymentStatusLabel().text)
+        assert ('Paid' in paymentRequestPage.paymentStatusLabel().text)
+
+
     # Test create payment request with schedule payment link
 
     def getRequestKey(self):
