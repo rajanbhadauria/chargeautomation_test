@@ -127,6 +127,7 @@ class TestPaymentRequest(BaseClass):
         log = self.myLogger()
         fake = Faker()
         paymentRequestPage = PaymentRequestPage(self.driver)
+        paymentRequestPage.addPaymentRequestLink().click()
 
         log.info("Filling email ")
         paymentRequestPage.emailInput().clear()
@@ -148,10 +149,9 @@ class TestPaymentRequest(BaseClass):
         day = int(shchedule_obj.strftime('%d'))
         hour = int(shchedule_obj.strftime('%H'))
         min = int(shchedule_obj.strftime('%M'))
-        #log.info("Scheduled date and time " + f"'{shchedule_obj.strftime('%a, %B %d, %Y %I:%M %p')}'")
         log.info("Scheduled day, hour and min " + f"'{shchedule_obj.strftime('%d, %H:%M')}'")
         paymentRequestPage.scheduleDateInput().click()
-        time.sleep(1)
+        time.sleep(2)
         paymentRequestPage.scheduleDay(day).click()
         paymentRequestPage.scheduleHour(hour).click()
         paymentRequestPage.scheduleMin(min).click()
@@ -169,18 +169,21 @@ class TestPaymentRequest(BaseClass):
 
         time.sleep(2)
         log.info("Searching request with id - " + requestId)
-        assert (len(self.searchRequestById(requestId)) > 0)
+        time.sleep(2)
+        searched_data = self.searchRequestById(requestId)
 
-        log.info("Created request found with id - " + requestId)
+        if len(searched_data) == 0:
+            log.info("Request not found with request id - "+ requestId)
+            return
 
-        log.info("Matching requested email - " + email)
-        email_matched = paymentRequestPage.findEmail().text
-        assert(email_matched == email)
-        log.info("Requested email matched with - " + email_matched)
+        self.logRequestData(searched_data)
+        log.info("Matching requested email - " + searched_data['email'])
+        assert(searched_data['email'] == email)
+        log.info("Requested email matched with - " + searched_data['email'])
 
         currency = paymentRequestPage.selectCurrency().get_attribute('alt')
         log.info("Matching requested amount - " + currency+str(amount))
-        amount_matched = paymentRequestPage.findAmount().text
+        amount_matched = searched_data['amount']
         requested_amount = currency+str(amount)
         assert (requested_amount == amount_matched)
         log.info("Requested amount matched with - " + amount_matched)
@@ -738,5 +741,45 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.filterInput().send_keys(request_id)
         time.sleep(2)
         log.info("Finding request")
-        return paymentRequestPage.findRequestRows()
+        assert(len(paymentRequestPage.findRequestRows())>0)
+        paymentRequestPage.toggleRowButton().click()
+        if len(paymentRequestPage.findRequestRows()) > 0:
+            request_type = paymentRequestPage.findRequestType().get_attribute('title')
+            amount = paymentRequestPage.findAmount().text
+            request_id = paymentRequestPage.findRequestIdLabel().text
+            payment_status = paymentRequestPage.paymentStatusLabel().text
+            email = paymentRequestPage.findEmail().text
+
+            paid_on = paymentRequestPage.findPaidOnDate().text
+            scheduled_date_label = paymentRequestPage.findScheduleDateLabel().text
+            expiry_date_label = paymentRequestPage.findExpiryDateLabel().text
+            chargeback_protection_label = paymentRequestPage.findChargebackProtectionLabel().text
+            payment_method = paymentRequestPage.findPaymentMethodLabel().text
+            description = paymentRequestPage.findDescription().text
+            terms = paymentRequestPage.findTerms().text
+            txn_ref = paymentRequestPage.findRequestIdLabel().text
+
+            return {
+                    'request_type': request_type, 'amount': amount, 'request_id': request_id, 'payment_status': payment_status, 'email': email, 'paid_on': paid_on,
+                    'scheduled_date_label': scheduled_date_label, 'expiry_date_label': expiry_date_label, 'chargeback_protection_label': chargeback_protection_label, 'payment_method': payment_method,
+                    'description': description, 'terms': terms, 'txn_ref': txn_ref,
+                    }
+
+
+    def logRequestData(self, logData):
+        log = self.myLogger()
+        log.info("Request type: " + logData['request_type'])
+        log.info("Request Amount: " + logData['amount'])
+        log.info("Request ID: " + logData['request_id'])
+        log.info("Payment Status: " + logData['payment_status'])
+        log.info("Email: " + logData['email'])
+        log.info("Paid On: " + logData['paid_on'])
+        log.info("Schedule date: " + logData['scheduled_date_label'])
+        log.info("Expiry date: " + logData['expiry_date_label'])
+        log.info("Chargeback Protection: " + logData['chargeback_protection_label'])
+        log.info("Payment method: " + logData['payment_method'])
+        log.info("Description: " + logData['description'])
+        log.info("Terms: " + logData['terms'])
+        log.info("Txn ref: " + logData['txn_ref'])
+
 

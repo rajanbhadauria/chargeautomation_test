@@ -116,12 +116,6 @@ class PaymentRequestPage:
     def toggleRowButton(self):
         return self.driver.find_element(By.XPATH, "//a[contains(@class, 'card-collapse')]")
 
-    def findDescription(self):
-        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'collapse')]//div[@class='row form-row']/div[@class = 'col-12 col-md-5']//dd")
-
-    def findTerms(self):
-        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'collapse')]//div[@class='row form-row']/div[@class = 'col-12 col-md-4']//dd")
-
     def expiryDay(self, day):
         return self.driver.find_element(By.XPATH, "//div[@id='date_2-picker-container-DatePicker']//div[contains(@class, 'datepicker-days')]/button/span[contains(@class, 'datepicker-day-text') and text()="+str(day)+"]/parent::button[1]")
 
@@ -173,8 +167,14 @@ class PaymentRequestPage:
     def findRequestRows(self):
         return self.driver.find_elements(By.XPATH, "//div[contains(@class, 'payment-request-pane')]")
 
+    def findRequestType(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'form-row')]/div[contains(@class, 'col-1 col-xs-6')]/span")
+
     def findAmount(self):
         return self.driver.find_element(By.XPATH, "//span[contains(@class, 'payment-amount-label')]")
+
+    def findRequestIdLabel(self):
+        return self.driver.find_element(By.XPATH, "//span[contains(@class, 'payment-id-label')]")
 
     def findEmail(self):
         return self.driver.find_element(By.XPATH, "//span[contains(@class, 'payment-email-label')]")
@@ -182,6 +182,30 @@ class PaymentRequestPage:
     def findShieldIcon(self):
         return self.driver.find_element(By.XPATH, "//span/i[@class='fas fa-shield-alt text-muted']")
 
+    def findPaidOnDate(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'form-row')]/div[contains(@class, 'col-6')][1]/dl/dd")
+
+    def findScheduleDateLabel(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'form-row')]/div[contains(@class, 'col-6')][2]/dl/dd")
+
+    def findExpiryDateLabel(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'form-row')]/div[contains(@class, 'col-6')][3]/dl/dd")
+
+    def findChargebackProtectionLabel(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'form-row')]/div[contains(@class, 'col-6')][4]/dl/dd")
+
+    def findPaymentMethodLabel(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'form-row')]/div[contains(@class, 'col-6')][5]/dl/dd")
+
+
+    def findDescription(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'collapse')]//div[@class='row form-row']/div[@class = 'col-12 col-md-5']//dd")
+
+    def findTerms(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'collapse')]//div[@class='row form-row']/div[@class = 'col-12 col-md-4']//dd")
+
+    def findReferenceNumber(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'collapse')]//div[@class='row form-row']/div[@class = 'col-12 col-md-3']//dd")
 
 
 
