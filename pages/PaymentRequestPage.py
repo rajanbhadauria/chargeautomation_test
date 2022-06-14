@@ -66,7 +66,7 @@ class PaymentRequestPage:
         return baseClass.verify_element_presence(self.driver, By.XPATH, "//div[@class='toast toast-success']/div")
 
     def paymentStatusLabel(self):
-        return self.driver.find_element(By.XPATH, "//span[@class='badge badge-success']")
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'form-row')]//span[contains(@class,'badge')]")
 
     def fullNameError(self):
         return self.driver.find_element(By.XPATH, "//input[@id='full_name']/following-sibling::span")
@@ -196,7 +196,6 @@ class PaymentRequestPage:
 
     def findPaymentMethodLabel(self):
         return self.driver.find_element(By.XPATH, "//div[contains(@class, 'form-row')]/div[contains(@class, 'col-6')][5]/dl/dd")
-
 
     def findDescription(self):
         return self.driver.find_element(By.XPATH, "//div[contains(@class, 'collapse')]//div[@class='row form-row']/div[@class = 'col-12 col-md-5']//dd")
