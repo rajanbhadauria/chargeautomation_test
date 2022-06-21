@@ -116,6 +116,12 @@ class PaymentRequestPage:
     def toggleRowButton(self):
         return self.driver.find_element(By.XPATH, "//a[contains(@class, 'card-collapse')]")
 
+    def newRequestBtns(self):
+        return self.driver.find_elements(By.XPATH, "//a[contains(@class, 'add-request')]")
+
+    def toggleRowButtons(self):
+        return self.driver.find_elements(By.XPATH, "//a[contains(@class, 'card-collapse')]")
+
     def expiryDay(self, day):
         return self.driver.find_element(By.XPATH, "//div[@id='date_2-picker-container-DatePicker']//div[contains(@class, 'datepicker-days')]/button/span[contains(@class, 'datepicker-day-text') and text()="+str(day)+"]/parent::button[1]")
 

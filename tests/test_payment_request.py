@@ -736,6 +736,24 @@ class TestPaymentRequest(BaseClass):
         assert (requested_amount == amount_matched)
         log.info("Requested amount matched with - " + amount_matched)
 
+    # creating payment request using new button
+    def test_create_payment_request_with_new_button(self):
+        """Test payment request using new button"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        paymentRequestPage.filterInput().clear()
+        if len(paymentRequestPage.findRequestRows()) == 0:
+            log.info("No request found")
+        else:
+            paymentRequestPage.toggleRowButtons()[0].click()
+            time.sleep(1)
+            paymentRequestPage.newRequestBtns()[0].click()
+            paymentRequestPage.sendPaymentRequest().click()
+            time.sleep(2)
+            log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
+            assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+
     def getRequestKey(self):
         log = self.myLogger()
         try:
