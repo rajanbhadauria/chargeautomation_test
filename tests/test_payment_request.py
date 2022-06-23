@@ -127,7 +127,7 @@ class TestPaymentRequest(BaseClass):
         log = self.myLogger()
         fake = Faker()
         paymentRequestPage = PaymentRequestPage(self.driver)
-
+        paymentRequestPage.addPaymentRequestLink().click()
         log.info("Filling email ")
         paymentRequestPage.emailInput().clear()
         email = fake.email()
@@ -173,18 +173,12 @@ class TestPaymentRequest(BaseClass):
 
         if len(searched_data) == 0:
             log.info("Request not found with request id - " + requestId)
+            assert False
             return
         log.info("All Data")
         self.logRequestData(searched_data)
-        log.info("Matching requested email - " + searched_data['email'])
-        assert(searched_data['email'] == email)
-        log.info("Requested email matched with - " + searched_data['email'])
         currency = paymentRequestPage.selectCurrency().get_attribute('alt')
-        log.info("Matching requested amount - " + currency+str(amount))
-        amount_matched = searched_data['amount']
-        requested_amount = currency+str(amount)
-        assert (requested_amount == amount_matched)
-        log.info("Requested amount matched with - " + amount_matched)
+        self.matchRequestData({"email": email, "amount": currency + str(amount)}, searched_data)
 
     # Test create payment request with expiry date
     def test_create_payment_request_with_expiry_date(self):
@@ -253,24 +247,16 @@ class TestPaymentRequest(BaseClass):
         log.info("Searching request with id - " + requestId)
         searched_data = self.searchRequestById(requestId)
 
+        searched_data = self.searchRequestById(requestId)
+
         if len(searched_data) == 0:
             log.info("Request not found with request id - " + requestId)
+            assert False
             return
         log.info("All Data")
         self.logRequestData(searched_data)
-
-        log.info("Created request found with id - " + requestId)
-        log.info("Matching requested email - " + email)
-        email_matched = searched_data['email']
-        assert (email_matched == email)
-        log.info("Requested email matched with - " + email_matched)
-
         currency = paymentRequestPage.selectCurrency().get_attribute('alt')
-        log.info("Matching requested amount - " + currency + str(amount))
-        amount_matched = searched_data['amount']
-        requested_amount = currency + str(amount)
-        assert (requested_amount == amount_matched)
-        log.info("Requested amount matched with - " + amount_matched)
+        self.matchRequestData({"email": email, "amount": currency + str(amount)}, searched_data)
 
     # Test creating payment request with wrong schedule date
     def test_create_payment_request_with_wrong_scheduled_date(self):
@@ -403,25 +389,13 @@ class TestPaymentRequest(BaseClass):
         searched_data = self.searchRequestById(requestId)
         if len(searched_data) == 0:
             log.info("Request not found with request id - " + requestId)
+            assert False
             return
         log.info("All Data")
         self.logRequestData(searched_data)
-
-        log.info("Created request found with id - " + requestId)
-
-        log.info("Matching requested email - " + email)
-        email_matched = searched_data['email']
-        assert (email_matched == email)
-        log.info("Requested email matched with - " + email_matched)
-
         currency = paymentRequestPage.selectCurrency().get_attribute('alt')
-        log.info("Matching requested amount - " + currency + str(amount))
-        amount_matched = searched_data['amount']
-        requested_amount = currency + str(amount)
-        assert (requested_amount == amount_matched)
-        log.info("Requested amount matched with - " + amount_matched)
-        log.info("Charge back protection status " + searched_data['chargeback_protection_label'])
-        assert(searched_data['chargeback_protection_label'] == 'Yes')
+        self.matchRequestData({"email": email, "amount": currency + str(amount), 'cb_on': 'Yes'}, searched_data)
+
 
     # Test create payment request with long text in description and terms input
     def test_create_payment_request_with_long_desc_and_terms(self):
@@ -790,7 +764,7 @@ class TestPaymentRequest(BaseClass):
             payment_method = paymentRequestPage.findPaymentMethodLabel().text if paymentRequestPage.findPaymentMethodLabel() else ""
             description = paymentRequestPage.findDescription().text if paymentRequestPage.findDescription() else ""
             terms = paymentRequestPage.findTerms().text if paymentRequestPage.findTerms() else ""
-            txn_ref = paymentRequestPage.findRequestIdLabel().text if paymentRequestPage.findReferenceNumber() else ""
+            txn_ref = paymentRequestPage.findReferenceNumber().text if paymentRequestPage.findReferenceNumber() else ""
 
             return {
                     'request_type': request_type, 'amount': amount, 'request_id': request_id, 'payment_status': payment_status, 'email': email, 'paid_on': paid_on,
@@ -798,6 +772,17 @@ class TestPaymentRequest(BaseClass):
                     'description': description, 'terms': terms, 'txn_ref': txn_ref,
                     }
 
+    def matchRequestData(self, supplied_items, find_items):
+        log = self.myLogger()
+        if 'email' in supplied_items:
+            assert (find_items['email'] == supplied_items['email'])
+            log.info("Requested email matched :: "+find_items['email'])
+        if 'amount' in supplied_items:
+            assert (find_items['amount'] == supplied_items['amount'])
+            log.info("Requested amount matched :: "+find_items['amount'])
+        if 'cb_on' in supplied_items:
+            assert (find_items['chargeback_protection_label'] == supplied_items['cb_on'])
+            log.info("Requested chargeback protection is on :: "+find_items['chargeback_protection_label'])
 
     def logRequestData(self, logData):
         log = self.myLogger()

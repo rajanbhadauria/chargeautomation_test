@@ -134,7 +134,6 @@ class PaymentRequestPage:
     def expiryDateError(self):
         return self.driver.find_element(By.XPATH, "//div[@id= 'date_2-wrapper']//parent::div/parent::div/small")
 
-
     def selectScheduleDateButton(self):
         return self.driver.find_element(By.XPATH, "//button[contains(@class, 'datepicker-button validate')][1]")
 
