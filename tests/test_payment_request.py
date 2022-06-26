@@ -688,6 +688,131 @@ class TestPaymentRequest(BaseClass):
             log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
             assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
 
+    # Test resend payment request link button
+    def test_resend_payment_request_link(self):
+        """Test resend payment request link button"""
+        log = self.myLogger()
+        fake = Faker()
+        self.test_create_payment_request_with_new_button()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeModalBtn().click()
+
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+
+        searched_data = self.searchRequestById(requestId)
+        if len(searched_data) == 0:
+            log.info("Request not found with request id - " + requestId)
+            assert False
+            return
+
+        log.info("Opening right expand menu")
+        paymentRequestPage.expandMenuListBtn().click()
+        log.info("Clicking to resend menu")
+        paymentRequestPage.findAllExpandMenuLinks()[0].click()
+        log.info('Clicking confirm resend')
+        paymentRequestPage.confirmModalBtn().click()
+        time.sleep(2)
+        log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+
+        requestId2 = self.getRequestKey()
+        assert(requestId2 == requestId)
+
+    # Test void payment request link
+    def test_void_payment_request_link(self):
+        """Test void payment request link"""
+        log = self.myLogger()
+        fake = Faker()
+        self.test_create_payment_request_with_new_button()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeModalBtn().click()
+
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+
+        searched_data = self.searchRequestById(requestId)
+        if len(searched_data) == 0:
+            log.info("Request not found with request id - " + requestId)
+            assert False
+            return
+
+        log.info("Opening right expand menu")
+        paymentRequestPage.expandMenuListBtn().click()
+        log.info("Clicking to void menu")
+        paymentRequestPage.findAllExpandMenuLinks()[1].click()
+        log.info('Clicking confirm void')
+        paymentRequestPage.confirmModalBtn().click()
+
+        log.info("Matching success message")
+        success_message = paymentRequestPage.toastSuccessMessage().text
+        log.info(success_message)
+        assert('Voided' in success_message)
+
+    # Test copy payment request link
+    def test_copy_payment_request_link(self):
+        """Test copy payment request link"""
+        log = self.myLogger()
+        fake = Faker()
+        self.test_create_payment_request_with_new_button()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeModalBtn().click()
+
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+
+        searched_data = self.searchRequestById(requestId)
+        if len(searched_data) == 0:
+            log.info("Request not found with request id - " + requestId)
+            assert False
+            return
+
+        log.info("Opening right expand menu")
+        paymentRequestPage.expandMenuListBtn().click()
+        log.info("Clicking to copy menu")
+        paymentRequestPage.findAllExpandMenuLinks()[2].click()
+        log.info('Copying link')
+        copied_link = paymentRequestPage.copyLinkInput().get_attribute('value')
+        log.info("Copied link is - " + copied_link)
+
+        link_list = copied_link.split("/")
+        log.info("Copied request link id is - " + link_list[-1])
+        assert(link_list[-1] == requestId)
+        log.info("Copied link request id matched")
+
+    # Test edit payment request link
+    def test_edit_payment_request_link(self):
+        """Test edit payment request link"""
+        log = self.myLogger()
+        fake = Faker()
+        self.test_create_payment_request_with_new_button()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeModalBtn().click()
+
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+
+        searched_data = self.searchRequestById(requestId)
+        if len(searched_data) == 0:
+            log.info("Request not found with request id - " + requestId)
+            assert False
+            return
+
+        log.info("Opening right expand menu")
+        paymentRequestPage.expandMenuListBtn().click()
+        log.info("Clicking to edit menu")
+        paymentRequestPage.findAllExpandMenuLinks()[3].click()
+        log.info('Editing link')
+        time.sleep(1)
+        paymentRequestPage.sendPaymentRequest().click()
+        time.sleep(2)
+        log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+
     def getRequestKey(self):
         log = self.myLogger()
         try:
@@ -699,6 +824,37 @@ class TestPaymentRequest(BaseClass):
             return link_list[-1]
         except Exception as e:
             log.info("Error in getting request url- " + e)
+
+    # Test mark as paid request link
+    def test_mark_as_paid_payment_request_link(self):
+        """Test mark as paid request link"""
+        log = self.myLogger()
+        fake = Faker()
+        self.test_create_payment_request_with_new_button()
+        paymentRequestPage = PaymentRequestPage(self.driver)
+        requestId = self.getRequestKey()
+        paymentRequestPage.closeModalBtn().click()
+
+        time.sleep(2)
+        log.info("Searching request with id - " + requestId)
+
+        searched_data = self.searchRequestById(requestId)
+        if len(searched_data) == 0:
+            log.info("Request not found with request id - " + requestId)
+            assert False
+            return
+
+        log.info("Opening right expand menu")
+        paymentRequestPage.expandMenuListBtn().click()
+        log.info("Clicking to mark paid as menu")
+        paymentRequestPage.findAllExpandMenuLinks()[5].click()
+        log.info('Clicking confirm mark as paid')
+        paymentRequestPage.confirmModalBtn().click()
+
+        log.info("Matching success message")
+        success_message = paymentRequestPage.toastSuccessMessage().text
+        log.info(success_message)
+        assert ('Marked as Paid' in success_message)
 
     def searchRequestById(self, request_id):
         log = self.myLogger()

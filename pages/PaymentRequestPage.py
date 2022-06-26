@@ -166,6 +166,21 @@ class PaymentRequestPage:
     def closeSentLinkModalBtn(self):
         return self.driver.find_element(By.ID, 'close_sentLinkModal');
 
+    def expandMenuListBtn(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'option-column')]/div")
+
+    def toastSuccessMessage(self):
+        baseClass = BaseClass()
+        return baseClass.verify_element_presence(self.driver, By.XPATH, "//div[@id='toast-container']/div/div")
+    def copyLinkInput(self):
+        return self.driver.find_element(By.ID, 'paymentRequestLinkModal_linkCopyInput')
+
+    def findAllExpandMenuLinks(self):
+        return self.driver.find_elements(By.XPATH, "//div[contains(@class, 'option-column')]/div/div/a")
+
+    def confirmModalBtn(self):
+        return self.driver.find_element(By.XPATH, "//div[@class = 'swal2-actions']/button[1]")
+
     def filterInput(self):
         return self.driver.find_element(By.ID, "filter-search")
 
