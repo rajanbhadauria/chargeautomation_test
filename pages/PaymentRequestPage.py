@@ -120,7 +120,7 @@ class PaymentRequestPage:
         return self.driver.find_elements(By.XPATH, "//a[contains(@class, 'add-request')]")
 
     def toggleRowButtons(self):
-        return self.driver.find_elements(By.XPATH, "//a[contains(@class, 'card-collapse')]")
+        return self.driver.find_elements(By.XPATH, "//a[@class='card-collapse collapsed']")
 
     def expiryDay(self, day):
         return self.driver.find_element(By.XPATH, "//div[@id='date_2-picker-container-DatePicker']//div[contains(@class, 'datepicker-days')]/button/span[contains(@class, 'datepicker-day-text') and text()="+str(day)+"]/parent::button[1]")
@@ -138,10 +138,13 @@ class PaymentRequestPage:
         return self.driver.find_element(By.XPATH, "//button[contains(@class, 'datepicker-button validate')][1]")
 
     def onChargeBackButton(self):
-        return self.driver.find_element(By.XPATH, "//div[@class='checkbox-toggle checkbox-choice']/label")
+        return self.driver.find_element(By.XPATH, "//label[@for='create-payment-request-cb-toggle']")
 
     def closeRequestModalButton(self):
         return self.driver.find_element(By.ID, "closeAddEditPaymentRequestButton")
+
+    def copyLinkCloseBtn(self):
+        return self.driver.find_element(By.XPATH, "//div[@id='paymentRequestLinkModal']//a")
 
     def selectExpiryDateButton(self):
         return self.driver.find_element(By.XPATH, "//div[@id='date_2-wrapper']//button[contains(@class, 'validate')]")
@@ -163,8 +166,11 @@ class PaymentRequestPage:
     def closeModalBtn(self):
         return self.driver.find_element(By.XPATH, "//div[contains(@class, 'modal') and @style!='']// a[@data-dismiss = 'modal']")
 
+    def closeChargeNowBtn(self):
+        return self.driver.find_element(By.ID, "closeChargeNowModal")
+
     def closeSentLinkModalBtn(self):
-        return self.driver.find_element(By.ID, 'close_sentLinkModal');
+        return self.driver.find_element(By.ID, 'close_sentLinkModal')
 
     def expandMenuListBtn(self):
         return self.driver.find_element(By.XPATH, "//div[contains(@class, 'option-column')]/div")
