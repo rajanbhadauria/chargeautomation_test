@@ -300,7 +300,7 @@ class TestPaymentRequest(BaseClass):
         time.sleep(2)
         log.info("Submit form using send link")
         paymentRequestPage.sendPaymentRequest().click()
-
+        time.sleep(2)
         assert ('Due date must be a future date and time' in paymentRequestPage.scheduleDateError().text)
         log.info("Scheduled date error message - " + paymentRequestPage.scheduleDateError().text)
         paymentRequestPage.closeRequestModalButton().click()
@@ -568,10 +568,6 @@ class TestPaymentRequest(BaseClass):
         self.matchRequestData({"email": email, "amount": currency + str(amount), 'payment_status': 'Paid'}, searched_data)
         log.info("Matching success message")
 
-        # success_message = paymentRequestPage.toastSuccessMessage().text
-        # log.info(success_message)
-        # assert ('successfully charged' in success_message)
-
     # Test create payment request with charge now payment link without adding card
     def test_payment_request_charge_now_link_without_card(self):
         """Test create payment request with charge now payment link without adding card"""
@@ -602,7 +598,7 @@ class TestPaymentRequest(BaseClass):
         time.sleep(2)
         log.info("Charging now")
         paymentRequestPage.chargeNowBtn().click()
-
+        time.sleep(2)
         fullname = paymentRequestPage.fullNameError().text;
         log.info("Error Message - " + fullname)
         assert ('Please enter name on card' in fullname)
@@ -693,18 +689,19 @@ class TestPaymentRequest(BaseClass):
             try:
                 paymentRequestPage.newRequestBtns()[0].click()
             except Exception as e:
+                log.info("Clicking new request button ")
                 paymentRequestPage.toggleRowButtons()[0].click()
                 paymentRequestPage.newRequestBtns()[0].click()
 
-            log.info("Clicking new request button " + paymentRequestPage.sentLinkSuccessMessage().text)
-            paymentRequestPage.newRequestBtns()[0].click()
-            log.info("Clicking creating request " + paymentRequestPage.sentLinkSuccessMessage().text)
+            time.sleep(2)
+            log.info("Clicking creating request ")
             paymentRequestPage.sendPaymentRequest().click()
             time.sleep(2)
-            log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
-            assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
-            time.sleep(2)
+            log.info("Success Message (new button) - " + paymentRequestPage.sentLinkSuccessMessage().text)
+            assert ('Payment Link Successfully' in paymentRequestPage.sentLinkSuccessMessage().text)
+            log.info('Closing Payment modal')
             paymentRequestPage.closeModalBtn().click()
+
 
     # Test resend payment request link button
     def test_resend_payment_request_link(self):
@@ -808,12 +805,11 @@ class TestPaymentRequest(BaseClass):
         """Test edit payment request link"""
         log = self.myLogger()
         fake = Faker()
-        self.test_create_payment_request_with_new_button()
         paymentRequestPage = PaymentRequestPage(self.driver)
+        self.test_create_payment_request_with_new_button()
+        time.sleep(4)
         requestId = self.getRequestKey()
-        paymentRequestPage.closeModalBtn().click()
 
-        time.sleep(2)
         log.info("Searching request with id - " + requestId)
 
         searched_data = self.searchRequestById(requestId)
@@ -854,7 +850,6 @@ class TestPaymentRequest(BaseClass):
         self.test_create_payment_request_with_new_button()
         paymentRequestPage = PaymentRequestPage(self.driver)
         requestId = self.getRequestKey()
-        paymentRequestPage.closeModalBtn().click()
 
         time.sleep(2)
         log.info("Searching request with id - " + requestId)

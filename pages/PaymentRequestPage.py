@@ -164,7 +164,7 @@ class PaymentRequestPage:
         return self.driver.find_element(By.ID, 'paymentLinkSentModal_linkCopyInput')
 
     def closeModalBtn(self):
-        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'modal') and @style!='']// a[@data-dismiss = 'modal']")
+        return self.driver.find_element(By.XPATH, "//div[@id='paymentLinkSentModal']//a[contains(@class, 'btn-sm')]")
 
     def closeChargeNowBtn(self):
         return self.driver.find_element(By.ID, "closeChargeNowModal")
