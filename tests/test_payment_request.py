@@ -3,7 +3,7 @@ from dateutil.parser import parse
 
 import pytest
 from faker import Faker
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.common.exceptions import WebDriverException
 
 from pages.HomePage import HomePage
 from pages.LoginPage import LoginPage
