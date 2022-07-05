@@ -46,6 +46,22 @@ class TestPaymentPages(BaseClass):
         log.info("Product error message is - "+product_error_message)
 
     #create product from create payment page with blank data
+    def test_create_product_with_blank_data_on_create_payment_page(self):
+        """Create product from create payment page with blank data"""
+        log = self.myLogger()
+        paymentPage = PaymentPagesPage(self.driver)
+        paymentPage.createPaymentPageLink().click()
+        log.info("Opening product list select box")
+        paymentPage.productSelectBox().click()
+        log.info('Clicking to add product')
+        paymentPage.addProductLinkInSelectBox().click()
+        log.info("Clicking Save Button")
+        paymentPage.saveProductBtnOnModal().click()
+        time.sleep(2)
+        errorMsg = paymentPage.productNameErrorOnModal().text
+        log.info("Product error message is - " + errorMsg)
+        assert ("The name" in errorMsg)
+
     #create product with invalid data from create payment page
 
 

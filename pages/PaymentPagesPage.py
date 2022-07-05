@@ -23,3 +23,15 @@ class PaymentPagesPage:
 
     def productErrorMsg(self):
         return self.driver.find_element(By.XPATH, "//small[contains(@class, 'invalid-feedback')]/strong")
+
+    def productSelectBox(self):
+        return self.driver.find_element(By.ID, "product-selector")
+
+    def addProductLinkInSelectBox(self):
+        return self.driver.find_element(By.XPATH, "//div[@id='product-selector']/div[@class='custom-dropdown-select-option_box']/a")
+
+    def saveProductBtnOnModal(self):
+        return self.driver.find_element(By.XPATH, "//div[@id='bookings-tabContent']//a[contains(@class, 'btn-success')]")
+
+    def productNameErrorOnModal(self):
+        return self.driver.find_element(By.XPATH, "//input[@id='transactionContact']/following-sibling::small")
