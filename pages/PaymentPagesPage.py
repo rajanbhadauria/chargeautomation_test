@@ -35,3 +35,24 @@ class PaymentPagesPage:
 
     def productNameErrorOnModal(self):
         return self.driver.find_element(By.XPATH, "//input[@id='transactionContact']/following-sibling::small")
+
+    def productNameInput(self):
+        return self.driver.find_element(By.ID, "transactionContact")
+
+    def productAmountInput(self):
+        return self.driver.find_element(By.ID, "transactionAmount")
+
+    def productDescriptionInput(self):
+        return self.driver.find_element(By.ID, "transactionDescription")
+
+    def selectedProductInput(self):
+        return self.driver.find_element(By.XPATH, "//div[@id = 'product-selector']//span")
+
+    def productSuccessMsg(self):
+        return self.driver.find_element(By.XPATH, "//div[@id='toast-container']//div[@class='toast-message']")
+
+    def productPriceLabel(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='price notranslate']")
+
+    def productSelectedCurrency(self):
+        return self.driver.find_element(By.XPATH, "//div[@id='currency-selector']//img[1]")

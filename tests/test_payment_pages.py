@@ -1,5 +1,6 @@
 import time
-
+from faker import Faker
+import random
 import pytest
 
 from pages.HomePage import HomePage
@@ -62,6 +63,42 @@ class TestPaymentPages(BaseClass):
         log.info("Product error message is - " + errorMsg)
         assert ("The name" in errorMsg)
 
-    #create product with invalid data from create payment page
+    #create product with vaild data from create payment page
+    def test_create_product_with_valid_data_on_create_payment_page(self):
+        """Create product from create payment page with valid data"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentPage = PaymentPagesPage(self.driver)
+
+        product_name = fake.name()
+        product_price = str(random.randint(50, 100))
+        product_currency = paymentPage.productSelectedCurrency().get_attribute("alt")
+
+        paymentPage.createPaymentPageLink().click()
+        log.info("Opening product list select box")
+        paymentPage.productSelectBox().click()
+        log.info('Clicking to add product')
+        paymentPage.addProductLinkInSelectBox().click()
+
+        log.info("Putting product name : "+product_name)
+        paymentPage.productNameInput().send_keys(product_name)
+        log.info("Putting product price : " + product_price)
+        paymentPage.productAmountInput().send_keys(product_price)
+        log.info("Clicking Save Button")
+        paymentPage.saveProductBtnOnModal().click()
+        time.sleep(2)
+        successMsg = paymentPage.productSuccessMsg().text
+        log.info("Product success message " + successMsg)
+        assert('Product added' in successMsg)
+        log.info("Matching select product and created product")
+        selectedProduct = paymentPage.selectedProductInput().text
+        log.info("Supplied product : " + product_name)
+        log.info("Selected product : " + selectedProduct)
+        assert (selectedProduct == product_name)
+        suppliedPrice = product_currency+product_price
+        selectPrice = paymentPage.productPriceLabel().text
+        log.info("Supplied product price: " + suppliedPrice)
+        log.info("Selected product price: " + selectPrice)
+        assert (suppliedPrice == suppliedPrice)
 
 
