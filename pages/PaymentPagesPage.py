@@ -36,6 +36,9 @@ class PaymentPagesPage:
     def productNameErrorOnModal(self):
         return self.driver.find_element(By.XPATH, "//input[@id='transactionContact']/following-sibling::small")
 
+    def productDescriptionErrorOnModal(self):
+        return self.driver.find_element(By.XPATH, "//textarea[@id='transactionDescription']/following-sibling::small")
+
     def productNameInput(self):
         return self.driver.find_element(By.ID, "transactionContact")
 
