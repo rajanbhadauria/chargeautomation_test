@@ -48,6 +48,9 @@ class PaymentPagesPage:
     def productDescriptionInput(self):
         return self.driver.find_element(By.ID, "transactionDescription")
 
+    def productImageInput(self):
+        return self.driver.find_element(By.ID, "reusable_product_image")
+
     def selectedProductInput(self):
         return self.driver.find_element(By.XPATH, "//div[@id = 'product-selector']//span")
 

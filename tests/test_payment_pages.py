@@ -1,3 +1,4 @@
+import os
 import time
 from faker import Faker
 import random
@@ -63,6 +64,42 @@ class TestPaymentPages(BaseClass):
         log.info("Product error message is - " + errorMsg)
         assert ("The name" in errorMsg)
 
+    # create product from create payment page with large image
+    def test_create_product_with_large_image_on_create_payment_page(self):
+        """Create product from create payment page with large image"""
+        log = self.myLogger()
+        paymentPage = PaymentPagesPage(self.driver)
+        fake = Faker()
+        product_name = fake.name()
+        product_price = str(random.randint(50, 100))
+        product_currency = paymentPage.productSelectedCurrency().get_attribute("alt")
+        product_description = ""
+        for _ in range(10):
+            product_description += fake.paragraph(nb_sentences=5)
+        paymentPage.createPaymentPageLink().click()
+        log.info("Opening product list select box")
+        paymentPage.productSelectBox().click()
+        log.info('Clicking to add product')
+        paymentPage.addProductLinkInSelectBox().click()
+        log.info("Putting product name : " + product_name)
+        paymentPage.productNameInput().send_keys(product_name)
+        log.info("Putting product price : " + product_price)
+        paymentPage.productAmountInput().send_keys(product_price)
+        log.info("Putting product description : " + product_description)
+        paymentPage.productDescriptionInput().send_keys(product_description)
+        log.info("Selecting image for upload")
+        paymentPage.productImageInput().send_keys(os.getcwd()+"/images/15mb.jpeg")
+        time.sleep(2)
+        errorMsg = paymentPage.productSuccessMsg().text
+        log.info("Image upload error message - " + errorMsg)
+        assert('Image size' in errorMsg)
+        log.info("Clicking Save Button")
+        paymentPage.saveProductBtnOnModal().click()
+        time.sleep(2)
+        errorMsg = paymentPage.productDescriptionErrorOnModal().text
+        log.info("Product description error message is - " + errorMsg)
+        assert ("description may not be greater" in errorMsg)
+
     # create product from create payment page with long description data
     def test_create_product_with_long_description_on_create_payment_page(self):
         """create product from create payment page with long description data"""
@@ -93,7 +130,7 @@ class TestPaymentPages(BaseClass):
         log.info("Product description error message is - " + errorMsg)
         assert ("description may not be greater" in errorMsg)
 
-    # create product with vaild data from create payment page
+    # create product with valid data from create payment page
     def test_create_product_with_valid_data_on_create_payment_page(self):
         """Create product from create payment page with valid data"""
         log = self.myLogger()
