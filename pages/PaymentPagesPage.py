@@ -62,3 +62,22 @@ class PaymentPagesPage:
 
     def productSelectedCurrency(self):
         return self.driver.find_element(By.XPATH, "//div[@id='currency-selector']//img[1]")
+
+    def productSelectBoxList(self):
+        return self.driver.find_elements(By.XPATH, "//div[@id='product-selector']//ul/li")
+
+    def productSelectBoxList(self):
+        return self.driver.find_elements(By.XPATH, "//div[@id='product-selector']//ul/li")
+
+    def selectedProductText(self):
+        return self.driver.find_element(By.XPATH, "//div[@id='product-selector']//span")
+
+    def saveProductBtn(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'payment-addedit-footer')]/button")
+
+    def termsLink(self):
+        return self.driver.find_element(By.ID, "rpp_tc")
+
+    def paymentPagesTermsInput(self):
+        return self.driver.find_element(By.ID, "reusable_payment_terms_and_conditions")
+

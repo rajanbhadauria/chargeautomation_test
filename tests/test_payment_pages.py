@@ -217,4 +217,86 @@ class TestPaymentPages(BaseClass):
         log.info("Selected product price: " + selectPrice)
         assert (suppliedPrice == suppliedPrice)
 
+    # create payment page without terms
+    def test_create_payment_page_without_terms(self):
+        """Create payment page without terms"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentPage = PaymentPagesPage(self.driver)
+
+        product_name = fake.name()
+        product_price = str(random.randint(50, 100))
+        product_currency = paymentPage.productSelectedCurrency().get_attribute("alt")
+        product_description = ""
+        product_description += fake.paragraph(nb_sentences=5)
+
+        paymentPage.createPaymentPageLink().click()
+        log.info("Opening product list select box")
+        paymentPage.productSelectBox().click()
+        log.info("Checking if product exists in the list")
+        product_list = paymentPage.productSelectBoxList()
+        if len(product_list) > 0:
+            log.info("Product exists in the list")
+            log.info("Selecting random product from the list")
+            random_select = random.randint(0, len(product_list))
+            product_list[random_select].click()
+            log.info("Select product is : " + paymentPage.selectedProductText().text)
+        else:
+            log.info('Clicking to add product')
+            paymentPage.addProductLinkInSelectBox().click()
+            log.info("Putting product name : " + product_name)
+            paymentPage.productNameInput().send_keys(product_name)
+            log.info("Putting product price : " + product_price)
+            paymentPage.productAmountInput().send_keys(product_price)
+            log.info("Putting product description : " + product_description)
+            paymentPage.productDescriptionInput().send_keys(product_description)
+            log.info("Selecting image for upload")
+            paymentPage.productImageInput().send_keys(os.getcwd() + "/images/p1.jpg")
+            time.sleep(2)
+            log.info("Clicking Save Button")
+            paymentPage.saveProductBtnOnModal().click()
+            time.sleep(2)
+            successMsg = paymentPage.productSuccessMsg().text
+            log.info("Product success message " + successMsg)
+            assert ('Product added' in successMsg)
+            log.info("Matching select product and created product")
+            selectedProduct = paymentPage.selectedProductInput().text
+            log.info("Supplied product : " + product_name)
+            log.info("Selected product : " + selectedProduct)
+            assert (selectedProduct == product_name)
+            suppliedPrice = product_currency + product_price
+            selectPrice = paymentPage.productPriceLabel().text
+            log.info("Supplied product price: " + suppliedPrice)
+            log.info("Selected product price: " + selectPrice)
+            assert (suppliedPrice == suppliedPrice)
+        paymentPage.saveProductBtn().click()
+        time.sleep(2)
+
+    # create payment page with terms
+    def test_create_payment_page_with_terms(self):
+        """Create payment page with terms"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentPage = PaymentPagesPage(self.driver)
+        terms = ""
+        terms += fake.paragraph(nb_sentences=5)
+
+        paymentPage.createPaymentPageLink().click()
+        log.info("Opening product list select box")
+        paymentPage.productSelectBox().click()
+        log.info("Checking if product exists in the list")
+        product_list = paymentPage.productSelectBoxList()
+        log.info("Product exists in the list")
+        log.info("Selecting random product from the list")
+        random_select = random.randint(0, len(product_list))
+        product_list[random_select].click()
+        log.info("Select product is : " + paymentPage.selectedProductText().text)
+        log.info('Opening terms input')
+        paymentPage.termsLink().click()
+        log.info('Adding terms text to input')
+        paymentPage.paymentPagesTermsInput().send_keys(terms)
+        log.info('Terms text is : ' + terms)
+        paymentPage.saveProductBtn().click()
+        time.sleep(2)
+
 
