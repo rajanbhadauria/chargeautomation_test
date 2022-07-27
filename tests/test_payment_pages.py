@@ -52,7 +52,7 @@ class TestPaymentPages(BaseClass):
         """Create product from create payment page with blank data"""
         log = self.myLogger()
         paymentPage = PaymentPagesPage(self.driver)
-        paymentPage.createPaymentPageLink().click()
+        #paymentPage.createPaymentPageLink().click()
         log.info("Opening product list select box")
         paymentPage.productSelectBox().click()
         log.info('Clicking to add product')
@@ -76,11 +76,7 @@ class TestPaymentPages(BaseClass):
         product_description = ""
         for _ in range(10):
             product_description += fake.paragraph(nb_sentences=5)
-        paymentPage.createPaymentPageLink().click()
-        log.info("Opening product list select box")
-        paymentPage.productSelectBox().click()
-        log.info('Clicking to add product')
-        paymentPage.addProductLinkInSelectBox().click()
+
         log.info("Putting product name : " + product_name)
         paymentPage.productNameInput().send_keys(product_name)
         log.info("Putting product price : " + product_price)
@@ -112,15 +108,14 @@ class TestPaymentPages(BaseClass):
         product_description = ""
         for _ in range(10):
             product_description += fake.paragraph(nb_sentences=5)
-        paymentPage.createPaymentPageLink().click()
-        log.info("Opening product list select box")
-        paymentPage.productSelectBox().click()
-        log.info('Clicking to add product')
-        paymentPage.addProductLinkInSelectBox().click()
+
         log.info("Putting product name : " + product_name)
+        paymentPage.productNameInput().clear()
         paymentPage.productNameInput().send_keys(product_name)
+        paymentPage.productDescriptionInput().clear()
         log.info("Putting product price : " + product_price)
         paymentPage.productAmountInput().send_keys(product_price)
+        paymentPage.productDescriptionInput().clear()
         log.info("Putting product description : " + product_description)
         paymentPage.productDescriptionInput().send_keys(product_description)
         log.info("Clicking Save Button")
@@ -143,17 +138,14 @@ class TestPaymentPages(BaseClass):
         product_description = ""
         product_description += fake.paragraph(nb_sentences=5)
 
-        paymentPage.createPaymentPageLink().click()
-        log.info("Opening product list select box")
-        paymentPage.productSelectBox().click()
-        log.info('Clicking to add product')
-        paymentPage.addProductLinkInSelectBox().click()
-
         log.info("Putting product name : "+product_name)
+        paymentPage.productNameInput().clear()
         paymentPage.productNameInput().send_keys(product_name)
         log.info("Putting product price : " + product_price)
+        paymentPage.productAmountInput().clear()
         paymentPage.productAmountInput().send_keys(product_price)
         log.info("Putting product description : " + product_description)
+        paymentPage.productDescriptionInput().clear()
         paymentPage.productDescriptionInput().send_keys(product_description)
         log.info("Clicking Save Button")
         paymentPage.saveProductBtnOnModal().click()
@@ -185,17 +177,19 @@ class TestPaymentPages(BaseClass):
         product_description = ""
         product_description += fake.paragraph(nb_sentences=5)
 
-        paymentPage.createPaymentPageLink().click()
         log.info("Opening product list select box")
         paymentPage.productSelectBox().click()
         log.info('Clicking to add product')
         paymentPage.addProductLinkInSelectBox().click()
 
         log.info("Putting product name : " + product_name)
+        paymentPage.productNameInput().clear()
         paymentPage.productNameInput().send_keys(product_name)
         log.info("Putting product price : " + product_price)
+        paymentPage.productAmountInput().clear()
         paymentPage.productAmountInput().send_keys(product_price)
         log.info("Putting product description : " + product_description)
+        paymentPage.productDescriptionInput().clear()
         paymentPage.productDescriptionInput().send_keys(product_description)
         log.info("Selecting image for upload")
         paymentPage.productImageInput().send_keys(os.getcwd() + "/images/p1.jpg")
@@ -230,7 +224,7 @@ class TestPaymentPages(BaseClass):
         product_description = ""
         product_description += fake.paragraph(nb_sentences=5)
 
-        paymentPage.createPaymentPageLink().click()
+        #paymentPage.createPaymentPageLink().click()
         log.info("Opening product list select box")
         paymentPage.productSelectBox().click()
         log.info("Checking if product exists in the list")
@@ -238,7 +232,7 @@ class TestPaymentPages(BaseClass):
         if len(product_list) > 0:
             log.info("Product exists in the list")
             log.info("Selecting random product from the list")
-            random_select = random.randint(0, len(product_list))
+            random_select = random.randint(0, len(product_list)-1)
             product_list[random_select].click()
             log.info("Select product is : " + paymentPage.selectedProductText().text)
         else:
@@ -274,7 +268,7 @@ class TestPaymentPages(BaseClass):
 
     # create payment page with terms
     def test_create_payment_page_with_terms(self):
-        """Create payment page with terms"""
+        """Test Create payment page with terms"""
         log = self.myLogger()
         fake = Faker()
         paymentPage = PaymentPagesPage(self.driver)
@@ -288,7 +282,7 @@ class TestPaymentPages(BaseClass):
         product_list = paymentPage.productSelectBoxList()
         log.info("Product exists in the list")
         log.info("Selecting random product from the list")
-        random_select = random.randint(0, len(product_list))
+        random_select = random.randint(0, len(product_list)-1)
         product_list[random_select].click()
         log.info("Select product is : " + paymentPage.selectedProductText().text)
         log.info('Opening terms input')
@@ -298,5 +292,62 @@ class TestPaymentPages(BaseClass):
         log.info('Terms text is : ' + terms)
         paymentPage.saveProductBtn().click()
         time.sleep(2)
+
+    """Test edit payment page"""
+    def test_edit_payment_pages(self):
+        """Test edit payment page"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentPage = PaymentPagesPage(self.driver)
+        log.info("Opening expand menu")
+        paymentPage.paymentPagesListToggleMenu()[0].click()
+        log.info("Clicking to edit payment page")
+        paymentPage.editPaymentPageLink().click()
+        log.info("Clicking to update booking button")
+        paymentPage.addEditPageSubmitBtn().click()
+        time.sleep(2)
+        landedPage = paymentPage.managePaymentPageTitle().text
+        log.info("Matching page title")
+        assert('Manage Payment Pages', landedPage)
+        log.info("Title is - " + landedPage)
+
+    """Test view transaction link payment page"""
+    def test_transaction_payment_pages(self):
+        """Test view transaction link payment page"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentPage = PaymentPagesPage(self.driver)
+
+        log.info("Opening expand menu")
+        paymentPage.paymentPagesListToggleMenu()[0].click()
+        log.info("Clicking to view txn page")
+        paymentPage.viewTxnPaymentPageLink().click()
+        time.sleep(2)
+        landedPage = paymentPage.managePaymentPageTitle().text
+        log.info("Matching page title")
+        assert ('Transactions', landedPage)
+        log.info("Title is - " + landedPage)
+
+    """Test clone payment page"""
+    def test_clone_payment_pages(self):
+        """Test clone payment page"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentPage = PaymentPagesPage(self.driver)
+
+        log.info("Opening expand menu")
+        paymentPage.paymentPagesListToggleMenu()[0].click()
+        log.info("Clicking to clone page")
+        paymentPage.clonePaymentPageLink().click()
+        log.info("Clicking clone confirm button")
+        paymentPage.cloneConfirmBtn().click()
+        time.sleep(2)
+        successMsg = paymentPage.productSuccessMsg().text
+        log.info("Matching success message")
+        assert ('Payment request page cloned successfully', successMsg)
+        log.info("Success message - " + successMsg)
+
+
+
 
 

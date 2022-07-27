@@ -81,3 +81,21 @@ class PaymentPagesPage:
     def paymentPagesTermsInput(self):
         return self.driver.find_element(By.ID, "reusable_payment_terms_and_conditions")
 
+    def paymentPagesListToggleMenu(self):
+        return self.driver.find_elements(By.XPATH, "//div[contains(@class, 'property-connected')]//div[@class='dropdown dropdown-sm']/a")
+
+    def editPaymentPageLink(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='dropdown-menu dropdown-menu-right show']/a[text()='Edit']")
+
+    def viewTxnPaymentPageLink(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='dropdown-menu dropdown-menu-right show']/a[text()='View Transactions']")
+
+    def clonePaymentPageLink(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='dropdown-menu dropdown-menu-right show']/a[text()='Clone']")
+
+    def cloneConfirmBtn(self):
+        return self.driver.find_element(By.XPATH, "//button[contains(@class, 'swal2-confirm')]")
+
+    def managePaymentPageTitle(self):
+        return self.driver.find_element(By.XPATH, "//h1[@class='page-title d-inline']")
+
