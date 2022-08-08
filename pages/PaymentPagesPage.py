@@ -96,6 +96,9 @@ class PaymentPagesPage:
     def cloneConfirmBtn(self):
         return self.driver.find_element(By.XPATH, "//button[contains(@class, 'swal2-confirm')]")
 
+    def viewPaymentPageLink(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='dropdown-menu dropdown-menu-right show']/a[text()='View']")
+
     def managePaymentPageTitle(self):
         return self.driver.find_element(By.XPATH, "//h1[@class='page-title d-inline']")
 

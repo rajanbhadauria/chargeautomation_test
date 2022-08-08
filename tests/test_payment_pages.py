@@ -347,6 +347,22 @@ class TestPaymentPages(BaseClass):
         assert ('Payment request page cloned successfully', successMsg)
         log.info("Success message - " + successMsg)
 
+    """Test view payment page"""
+    def test_view_payment_pages(self):
+        """Test view payment page"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentPage = PaymentPagesPage(self.driver)
+
+        log.info("Opening expand menu")
+        paymentPage.paymentPagesListToggleMenu()[0].click()
+        log.info("Clicking to view page")
+        paymentPage.viewPaymentPageLink().click()
+        landedPage = paymentPage.managePaymentPageTitle().text
+        log.info("Matching page title")
+        assert ('', landedPage)
+        log.info("Title is - " + landedPage)
+
 
 
 
