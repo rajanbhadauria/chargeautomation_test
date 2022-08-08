@@ -93,12 +93,21 @@ class PaymentPagesPage:
     def clonePaymentPageLink(self):
         return self.driver.find_element(By.XPATH, "//div[@class='dropdown-menu dropdown-menu-right show']/a[text()='Clone']")
 
+    def copyPaymentPageLink(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='dropdown-menu dropdown-menu-right show']/a[text()='Copy page link']")
+
+    def deletePaymentPageLink(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='dropdown-menu dropdown-menu-right show']/a[text()='Delete']")
+
     def cloneConfirmBtn(self):
         return self.driver.find_element(By.XPATH, "//button[contains(@class, 'swal2-confirm')]")
 
     def viewPaymentPageLink(self):
-        return self.driver.find_element(By.XPATH, "//div[@class='dropdown-menu dropdown-menu-right show']/a[text()='View']")
+        return self.driver.find_element(By.XPATH, "//div[@class='dropdown-menu dropdown-menu-right show']/a[text()='View Page']")
 
     def managePaymentPageTitle(self):
         return self.driver.find_element(By.XPATH, "//h1[@class='page-title d-inline']")
+
+    def managePageTabLink(self):
+        return self.driver.find_element(By.XPATH, "//div[@class='row upsell-tab-nav']/a[1]")
 

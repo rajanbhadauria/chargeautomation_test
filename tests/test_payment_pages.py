@@ -334,7 +334,8 @@ class TestPaymentPages(BaseClass):
         log = self.myLogger()
         fake = Faker()
         paymentPage = PaymentPagesPage(self.driver)
-
+        log.info("Opening manage page tab")
+        paymentPage.managePageTabLink().click()
         log.info("Opening expand menu")
         paymentPage.paymentPagesListToggleMenu()[0].click()
         log.info("Clicking to clone page")
@@ -353,7 +354,8 @@ class TestPaymentPages(BaseClass):
         log = self.myLogger()
         fake = Faker()
         paymentPage = PaymentPagesPage(self.driver)
-
+        log.info("Opening manage page tab")
+        paymentPage.managePageTabLink().click()
         log.info("Opening expand menu")
         paymentPage.paymentPagesListToggleMenu()[0].click()
         log.info("Clicking to view page")
@@ -362,6 +364,45 @@ class TestPaymentPages(BaseClass):
         log.info("Matching page title")
         assert ('', landedPage)
         log.info("Title is - " + landedPage)
+        """Test clone payment page"""
+
+    #Test copy link payment page
+    def test_copy_link_payment_pages(self):
+        """Test copy link payment page"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentPage = PaymentPagesPage(self.driver)
+        log.info("Opening manage page tab")
+        paymentPage.managePageTabLink().click()
+        log.info("Opening expand menu")
+        paymentPage.paymentPagesListToggleMenu()[0].click()
+        log.info("Clicking to copy page")
+        paymentPage.copyPaymentPageLink().click()
+        time.sleep(2)
+        successMsg = paymentPage.productSuccessMsg().text
+        log.info("Matching success message")
+        assert ('Payment page link copied to clipboard', successMsg)
+        log.info("Success message - " + successMsg)
+
+    #Test delete ayment page
+    def test_delete_payment_pages(self):
+        """Test delete payment page"""
+        log = self.myLogger()
+        fake = Faker()
+        paymentPage = PaymentPagesPage(self.driver)
+        log.info("Opening manage page tab")
+        paymentPage.managePageTabLink().click()
+        log.info("Opening expand menu")
+        paymentPage.paymentPagesListToggleMenu()[0].click()
+        log.info("Clicking to delete page")
+        paymentPage.deletePaymentPageLink().click()
+        log.info("Clicking delete confirm button")
+        paymentPage.cloneConfirmBtn().click()
+        time.sleep(2)
+        successMsg = paymentPage.productSuccessMsg().text
+        log.info("Matching success message")
+        assert ('Payment request page deleted', successMsg)
+        log.info("Success message - " + successMsg)
 
 
 
