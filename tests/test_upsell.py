@@ -60,13 +60,28 @@ class TestUpsell(BaseClass):
         else:
             log.info("Upsell not found")
 
-
-
-
-
-
-
     # upsell help link testing
+    def test_help_text_link(self):
+        """upsell help link testing"""
+        log = self.myLogger()
+        upsellPage = UpsellPage(self.driver)
+        upsellPage.upsellTabLinks()[1].click()
+        log.info("Clicking to help icon")
+        upsellPage.getHelpLinkTooltip().click()
+        helpTxt = upsellPage.getHelpTooltip().text
+        log.info(f"Help text is - {helpTxt}")
+        log.info("Clicking to help link")
+        log.info("Matching help page title")
+        helpPageTitle = upsellPage.getHelpPageTitle().text
+        assert('Upsell' in helpPageTitle)
+        log.info(f"Help page title is - {helpPageTitle}")
+
+
+
+
+
+
+
     # create upsell with blank template and blank data
     # create upsell with blank template and invalid data
 
