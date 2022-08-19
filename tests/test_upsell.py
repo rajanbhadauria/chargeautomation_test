@@ -1,6 +1,7 @@
 import pytest
 import time
 import re
+from faker import Faker
 
 from selenium.common.exceptions import NoSuchElementException
 
@@ -8,6 +9,7 @@ from pages.UpsellPage import UpsellPage
 from utilities.BaseClass import BaseClass
 from pages.HomePage import HomePage
 from pages.LoginPage import LoginPage
+from selenium.webdriver.common.action_chains import ActionChains
 
 @pytest.mark.usefixtures('loginData')
 class TestUpsell(BaseClass):
@@ -61,28 +63,93 @@ class TestUpsell(BaseClass):
             log.info("Upsell not found")
 
     # upsell help link testing
-    def test_help_text_link(self):
-        """upsell help link testing"""
+    def help_text_link(self):
+        """Upsell help link testing"""
         log = self.myLogger()
         upsellPage = UpsellPage(self.driver)
-        upsellPage.upsellTabLinks()[1].click()
+        upsellPage.upsellTabLinks()[0].click()
         log.info("Clicking to help icon")
         upsellPage.getHelpLinkTooltip().click()
         helpTxt = upsellPage.getHelpTooltip().text
         log.info(f"Help text is - {helpTxt}")
-        log.info("Clicking to help link")
+        log.info("Clicking to Learn more link")
         log.info("Matching help page title")
         helpPageTitle = upsellPage.getHelpPageTitle().text
         assert('Upsell' in helpPageTitle)
         log.info(f"Help page title is - {helpPageTitle}")
 
-
-
-
-
-
-
     # create upsell with blank template and blank data
-    # create upsell with blank template and invalid data
+    def test_create_upsell_with_blank_template_and_data(self):
+        """Create upsell with blank template and blank data"""
+        log = self.myLogger()
+        upsellPage = UpsellPage(self.driver)
+        log.info("Opening add upsell modal")
+        upsellPage.getCreateUpsellBtn().click()
+        log.info("Opening blank template page")
+        upsellPage.getBlankTemplateLink().click()
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        log.info("Clicking to save")
+        upsellPage.getSaveUpsellBtn().click()
+        time.sleep(2)
+        title_input_error_msg = upsellPage.getTitleInputErrorMsg().text
+        price_input_error_msg = upsellPage.getPriceInputErrorMsg().text
+        log.info("Matching Title error message ")
+        assert("Title field" in title_input_error_msg)
+        log.info("Title error message is " + title_input_error_msg)
+        log.info("Matching Price error message ")
+        assert ("Price must be greater " in price_input_error_msg)
+        log.info("Price error message is " + price_input_error_msg)
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        self.driver.close()
+
+    # Create upsell with blank template and invalid data
+    def test_create_upsell_with_blank_template_and_invalid_data(self):
+        """Create upsell with blank template and invalid data"""
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        self.driver.refresh()
+        log = self.myLogger()
+        upsellPage = UpsellPage(self.driver)
+        title_data = "-- javascript:void(0); <?php die();?> #//^&&3219 ,,-- +++++!`~~~"
+        price_data = "ABC@&&^&*#"
+        log.info('Filling title field')
+        upsellPage.getTitleInput().send_keys(title_data)
+        log.info('Title data is -' + title_data)
+        log.info('Filling price field')
+        upsellPage.getPriceInput().send_keys(price_data)
+        log.info('Price data is -' + price_data)
+        log.info("Clicking to save")
+        element = upsellPage.getSaveUpsellBtn()
+        element.click()
+        time.sleep(2)
+        price_input_error_msg = upsellPage.getPriceInputErrorMsg().text
+        log.info("Matching Price error message ")
+        assert ("Price must be greater " in price_input_error_msg)
+        log.info("Price error message is " + price_input_error_msg)
+
+    # Create upsell with blank template and valid data
+    def test_create_upsell_with_blank_template_and_valid_data(self):
+        """Create upsell with blank template and valid data"""
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        self.driver.refresh()
+        log = self.myLogger()
+        fake = Faker()
+        upsellPage = UpsellPage(self.driver)
+        title_data = fake.name()
+        price_data = fake.pyint()
+        log.info('Filling title field')
+        upsellPage.getTitleInput().send_keys(title_data)
+        log.info('Title data is -' + title_data)
+        log.info('Filling price field')
+        upsellPage.getPriceInput().send_keys(price_data)
+        log.info('Price data is -' + str(price_data))
+        log.info("Clicking to save")
+        element = upsellPage.getSaveUpsellBtn()
+        element.click()
+        time.sleep(2)
+        success_msg = upsellPage.alertModalMsg().text
+        log.info("Success message is : " + success_msg)
+        assert ("Upsell added successfully " in success_msg)
+
+
 
 

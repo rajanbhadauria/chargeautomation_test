@@ -40,6 +40,33 @@ class UpsellPage:
     def getHelpPageTitle(self):
         return self.driver.find_element(By.XPATH, "//h1")
 
+    def getCreateUpsellBtn(self):
+        return self.driver.find_element(By.ID, "add-upsell-btn")
+
+    def getBlankTemplateLink(self):
+        return self.driver.find_element(By.XPATH, "//a[@class='temp-box start']")
+
+    def getTitleInput(self):
+        return self.driver.find_element(By.ID, "upsellTitle")
+
+    def getPriceInput(self):
+        return self.driver.find_element(By.ID, "new_add_on_upsell_price")
+
+    def getSaveUpsellBtn(self):
+        return self.driver.find_element(By.XPATH, "//button[contains(@class, 'save-upsell')]")
+
+    def getTitleInputErrorMsg(self):
+        return self.driver.find_element(By.XPATH, "//input[@id='upsellTitle']/following-sibling::small/strong")
+
+    def getPriceInputErrorMsg(self):
+        return self.driver.find_element(By.XPATH, "//input[@id='new_add_on_upsell_price']/../../small/strong")
+
+    def getCloseModalBtn(self):
+        return self.driver.find_element(By.ID, "close-upsell-modal")
+
+    def alertModalMsg(self):
+        return self.driver.find_element(By.ID, "swal2-content")
+
 
 
 
