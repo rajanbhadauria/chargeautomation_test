@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
 
 from utilities.BaseClass import BaseClass
 
@@ -51,6 +52,9 @@ class UpsellPage:
 
     def getPriceInput(self):
         return self.driver.find_element(By.ID, "new_add_on_upsell_price")
+
+    def getPriceModalSelectBox(self):
+        return Select(self.driver.find_element(By.ID, "new_add_on_upsell_per"))
 
     def getSaveUpsellBtn(self):
         return self.driver.find_element(By.XPATH, "//button[contains(@class, 'save-upsell')]")

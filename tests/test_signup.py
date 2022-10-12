@@ -459,7 +459,7 @@ class TestSignup(BaseClass):
         log.info("Terms accepted")
         log.info('Submitting signup form')
         signup.signupSubmit().click()
-        time.sleep(5)
+        time.sleep(10)
 
         log.info('Success user name - ' + f"'{signup.signup_success_name().text}'")
         assert (fullName in signup.signup_success_name().text)

@@ -66,6 +66,7 @@ def pytest_runtest_makereport(item):
 
 
 def _capture_screenshot(name):
+    yield
     driver.get_screenshot_as_file('reports/' + name)
 
 

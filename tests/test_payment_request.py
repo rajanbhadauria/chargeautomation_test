@@ -41,8 +41,9 @@ class TestPaymentRequest(BaseClass):
         log = self.myLogger()
         paymentRequestPage = PaymentRequestPage(self.driver)
         paymentRequestPage.addPaymentRequestLink().click()
-        log.info("Submit form with blank data")
+        log.info("Clearing amount input data")
         paymentRequestPage.amountInput().clear()
+        log.info("Submit form with blank data")
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Email validation message " + f"'{paymentRequestPage.emailError().text}'")
@@ -941,7 +942,6 @@ class TestPaymentRequest(BaseClass):
             log.info("Requested payment expiry date is matched and is :: "+find_items['expiry_date_label'])
 
     def logRequestData(self, logData):
-        return
         log = self.myLogger()
         log.info("Request type: " + logData['request_type'])
         log.info("Request Amount: " + logData['amount'])
