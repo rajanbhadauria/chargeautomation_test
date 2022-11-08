@@ -7,12 +7,14 @@ from faker import Faker
 from selenium.webdriver.support.ui import Select
 
 from pages.BookingPage import BookingPage
+from pages.PrecheckinPage import PrecheckinPage
 from utilities.BaseClass import BaseClass
 from pages.HomePage import HomePage
 from pages.LoginPage import LoginPage
 
 @pytest.mark.usefixtures('loginData')
 class TestPreCheckin(BaseClass):
+
     # Login to site
     def test_login(self, loginData):
         """Test Payment request login to charge automation"""
@@ -58,7 +60,6 @@ class TestPreCheckin(BaseClass):
         bookingPage.getCalendarDate(checkin_date).click()
         log.info("Selecting check-out date" + checkout_date)
         bookingPage.getCalendarDate(checkout_date).click()
-
         log.info("Selecting booking source")
         random_booking_source = random.randint(1, 6)
         booking_source = Select(bookingPage.getBookingSourceDropdown())
@@ -75,9 +76,67 @@ class TestPreCheckin(BaseClass):
         log.info("Setting email input")
         email = fake.email(domain='yopmail.com')
         bookingPage.getEmailInput().send_keys(email)
+        log.info("Creating new booking ")
         bookingPage.getSaveBookingBtn().click()
+        time.sleep(5)
+        log.info("Clicking to share pre-checkin link icon")
+        bookingPage.getShareLinkBtn().click()
+        time.sleep(2)
+        log.info("Copying link")
+        link = bookingPage.getShareLinkInput().get_attribute('value')
+        log.info("Pre checkin link - " + link)
+        log.info("Closing copy link modal")
+        bookingPage.getPreCheckinCopyModalCloseBtn().click()
+        log.info("Profile menu opening")
+        bookingPage.getProfileMenuExpLink().click()
+        log.info("Logout from the current session")
+        bookingPage.getLogoutLink().click()
+        self.driver.add_cookie({'name': 'link', 'value': link})
+        time.sleep(5)
+
+
+    # Test landing to pre-checkin page
+    def test_pre_checkin_landing(self):
+        """Test landing to pre-checkin page"""
+        log = self.myLogger()
+        fake = Faker()
+        link = str(self.driver.get_cookie('link')['value'])
+        log.info("URL from Cookie " + link)
+        time.sleep(2)
+        self.driver.get(link)
+        log.info("Redirecting to pre-check-in page")
+        time.sleep(5)
+        preCheckinPage = PrecheckinPage(self.driver)
+        log.info("Clicking to get started")
+        preCheckinPage.getStartedBtn().click()
+        #Basic info tab
+        time.sleep(5)
+        log.info("Filling full name")
+        try:
+            preCheckinPage.getFullNameInput().send_keys(fake.name())
+        except:
+            log.info("Full name input field is not found")
+
+        #phone number
+        log.info("Filling phone field")
+        try:
+            preCheckinPage.getPhoneInput().send_keys(fake.phone())
+        except:
+            log.info("Phone input field is not found")
+
+        # phone number
+        log.info("Filling DOB field")
+        dob_date = datetime.datetime.now() + datetime.timedelta(days=-50)
+        try:
+            preCheckinPage.getDobInput().send_keys(dob_date)
+        except:
+            log.info("DOB input field is not found")
+
 
         time.sleep(20)
+
+
+
 
 
 

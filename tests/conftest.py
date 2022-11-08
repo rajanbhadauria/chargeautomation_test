@@ -12,7 +12,7 @@ driver = None
 def setup(request):
     global driver
     driver = webdriver.Chrome()
-    driver.implicitly_wait(0.5)
+    driver.implicitly_wait(1)
     driver.get('https://master.chargeautomation.com/')
     driver.maximize_window()
     request.cls.driver = driver

@@ -1,3 +1,4 @@
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
@@ -41,13 +42,30 @@ class BookingPage:
         return self.driver.find_element(By.XPATH, "//div[@id='datepicker-trigger-booking-add']")
 
     def getCalendarDate(self, date_supplied):
-        print("#######################")
-        print("//div[@id='airbnb-style-datepicker-wrapper-3fUnU']//td[@data-date='"+date_supplied+"']")
-        print("#######################")
-        return self.driver.find_element(By.XPATH, "//div[@class='asd__month'][1]//td/button[@date='"+date_supplied+"'][1]")
+        try:
+            return self.driver.find_element(By.XPATH, "//div[@class='asd__month'][1]//td/button[@date='"+date_supplied+"'][1]")
+        except NoSuchElementException:
+            return self.driver.find_element(By.XPATH, "//div[@class='asd__month'][2]//td/button[@date='"+date_supplied+"'][1]")
 
     def getSaveBookingBtn(self):
         return self.driver.find_element(By.XPATH, "//div[@id='add_edit_booking_modal']//button[@name='Save Changes'][1]")
+
+    def getShareLinkBtn(self):
+        return self.driver.find_element(By.XPATH, "//i[@title='Share']/ancestor::a[1]")
+
+    def getShareLinkInput(self):
+        return self.driver.find_element(By.ID, "shareBookingModal_linkCopyInput")
+
+    def getPreCheckinCopyModalCloseBtn(self):
+        return self.driver.find_element(By.XPATH, "//a[@class='btn btn-secondary btn-sm']")
+
+    def getProfileMenuExpLink(self):
+        return self.driver.find_element(By.ID, "dropdownMenuButton")
+
+    def getLogoutLink(self):
+        return self.driver.find_element(By.LINK_TEXT, "Logout")
+
+
 
 
 
