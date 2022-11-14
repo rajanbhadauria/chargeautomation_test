@@ -110,9 +110,10 @@ class TestPreCheckin(BaseClass):
         log.info("Clicking to get started")
         preCheckinPage.getStartedBtn().click()
         #Basic info tab
-        time.sleep(5)
+        time.sleep(10)
         log.info("Filling full name")
         try:
+            preCheckinPage.getFullNameInput().clear()
             preCheckinPage.getFullNameInput().send_keys(fake.name())
         except:
             log.info("Full name input field is not found")
@@ -120,6 +121,8 @@ class TestPreCheckin(BaseClass):
         #phone number
         log.info("Filling phone field")
         try:
+            time.sleep(3)
+            preCheckinPage.getPhoneInput().clear()
             preCheckinPage.getPhoneInput().send_keys(fake.phone())
         except:
             log.info("Phone input field is not found")
@@ -128,6 +131,7 @@ class TestPreCheckin(BaseClass):
         log.info("Filling DOB field")
         dob_date = datetime.datetime.now() + datetime.timedelta(days=-50)
         try:
+            preCheckinPage.getDobInput().clear()
             preCheckinPage.getDobInput().send_keys(dob_date)
         except:
             log.info("DOB input field is not found")

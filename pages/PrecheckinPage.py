@@ -16,34 +16,34 @@ class PrecheckinPage:
 
     ## Basic info page elements
     def getFullNameInput(self):
-        return self.driver.find_element(By.ID, 6)
+        return self.baseClass.verify_element_presence(self.driver, By.ID, 6)
 
     def getPhoneInput(self):
-        return self.driver.find_element(By.ID, "phone-6xunt6")
+        return self.baseClass.verify_element_presence(self.driver, By.XPATH, "//input[@type='tel']")
 
     def getDobInput(self):
-        return self.driver.find_element(By.ID, "7")
+        return self.baseClass.verify_element_presence(self.driver, By.ID, "7")
 
     def getNationalityInput(self):
-        return self.driver.find_element(By.ID, "8")
+        return self.baseClass.verify_element_presence(self.driver, By.ID, "8")
 
     def getEmailInput(self):
-        return self.driver.find_element(By.ID, "1")
+        return self.baseClass.verify_element_presence(self.driver, By.ID, "1")
 
     def getGenderInput(self):
-        return self.driver.find_element(By.ID, "9")
+        return self.baseClass.verify_element_presence(self.driver, By.ID, "9")
 
     def getAddressInput(self):
-        return self.driver.find_element(By.ID, "update-property-address")
+        return self.baseClass.verify_element_presence(self.driver, By.ID, "update-property-address")
 
     def getZipInput(self):
-        return self.driver.find_element(By.ID, "11")
+        return self.baseClass.verify_element_presence(self.driver, By.ID, "11")
 
     def getAdultsCountInput(self):
-        return self.driver.find_element(By.ID, "guestAdults")
+        return self.baseClass.verify_element_presence(self.driver, By.ID, "guestAdults")
 
     def getChildrenInput(self):
-        return self.driver.find_element(By.ID, "guestChildren")
+        return self.baseClass.verify_element_presence(self.driver, By.ID, "guestChildren")
 
 
 
