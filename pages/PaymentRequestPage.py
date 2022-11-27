@@ -81,7 +81,7 @@ class PaymentRequestPage:
         return self.driver.find_element(By.XPATH, "//input[@id= 'transactionContact']/parent::div/small/strong")
 
     def amountInput(self):
-        return self.driver.find_element(By.ID, 'transactionAmount')
+        return self.driver.find_element(By.XPATH, "//div[@class='input-group currency-box']/input")
 
     def selectCurrency(self):
         return self.driver.find_element(By.XPATH, "//div[@id='currency-selector']//img")

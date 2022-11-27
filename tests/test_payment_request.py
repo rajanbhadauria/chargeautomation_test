@@ -41,8 +41,9 @@ class TestPaymentRequest(BaseClass):
         log = self.myLogger()
         paymentRequestPage = PaymentRequestPage(self.driver)
         paymentRequestPage.addPaymentRequestLink().click()
-        log.info("Submit form with blank data")
+        log.info("Clearing amount input data")
         paymentRequestPage.amountInput().clear()
+        log.info("Submit form with blank data")
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Email validation message " + f"'{paymentRequestPage.emailError().text}'")
@@ -164,7 +165,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
-        assert('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        assert('Payment Link Successfully' in paymentRequestPage.sentLinkSuccessMessage().text)
         requestId = self.getRequestKey()
         paymentRequestPage.closeModalBtn().click()
 
@@ -243,7 +244,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
-        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully' in paymentRequestPage.sentLinkSuccessMessage().text)
         requestId = self.getRequestKey()
         paymentRequestPage.closeModalBtn().click()
         time.sleep(2)
@@ -380,7 +381,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
-        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully' in paymentRequestPage.sentLinkSuccessMessage().text)
         requestId = self.getRequestKey()
         paymentRequestPage.closeModalBtn().click()
 
@@ -436,7 +437,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
-        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully' in paymentRequestPage.sentLinkSuccessMessage().text)
         requestId = self.getRequestKey()
         paymentRequestPage.closeModalBtn().click()
 
@@ -656,7 +657,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
-        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully' in paymentRequestPage.sentLinkSuccessMessage().text)
         requestId = self.getRequestKey()
         paymentRequestPage.closeModalBtn().click()
 
@@ -730,7 +731,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.confirmModalBtn().click()
         time.sleep(2)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
-        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully' in paymentRequestPage.sentLinkSuccessMessage().text)
 
         requestId2 = self.getRequestKey()
         assert(requestId2 == requestId)
@@ -827,7 +828,7 @@ class TestPaymentRequest(BaseClass):
         paymentRequestPage.sendPaymentRequest().click()
         time.sleep(2)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
-        assert ('Payment Link Successfully Sent!' in paymentRequestPage.sentLinkSuccessMessage().text)
+        assert ('Payment Link Successfully' in paymentRequestPage.sentLinkSuccessMessage().text)
         paymentRequestPage.closeModalBtn().click()
 
     def getRequestKey(self):
@@ -941,7 +942,6 @@ class TestPaymentRequest(BaseClass):
             log.info("Requested payment expiry date is matched and is :: "+find_items['expiry_date_label'])
 
     def logRequestData(self, logData):
-        return
         log = self.myLogger()
         log.info("Request type: " + logData['request_type'])
         log.info("Request Amount: " + logData['amount'])
