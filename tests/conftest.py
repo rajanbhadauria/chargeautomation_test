@@ -4,14 +4,14 @@ from pathlib import Path
 import pytest
 from selenium import webdriver
 
-#import chromedriver_binary  # Adds chromedriver binary to path
+import chromedriver_binary  # Adds chromedriver binary to path
 driver = None
 
 
 @pytest.fixture(scope='class')
 def setup(request):
     global driver
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome('C:/Users/rajan/Downloads/chromedriver_win32/chromedriver.exe')
     driver.implicitly_wait(0.5)
     driver.get('https://master.chargeautomation.com/')
     driver.maximize_window()
@@ -66,6 +66,7 @@ def pytest_runtest_makereport(item):
 
 
 def _capture_screenshot(name):
+    yield
     driver.get_screenshot_as_file('reports/' + name)
 
 
