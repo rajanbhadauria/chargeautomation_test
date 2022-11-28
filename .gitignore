@@ -4,3 +4,5 @@ venv/
 /logger.log
 /utilities/__pycache__
 /tests/__pycache__/
+/tests/conftest.py
+/tests/logger.log

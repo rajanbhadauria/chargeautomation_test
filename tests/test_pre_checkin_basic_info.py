@@ -110,10 +110,10 @@ class TestPreCheckin(BaseClass):
         log.info("Clicking to get started")
         preCheckinPage.getStartedBtn().click()
         # Basic info tab
-        time.sleep(10)
+        time.sleep(2)
         log.info("Clicking to save button")
         preCheckinPage.getStartedBtn().click()
-        time.sleep(10)
+        time.sleep(2)
 
         #checking error messages
         # phone number
@@ -182,8 +182,34 @@ class TestPreCheckin(BaseClass):
         except:
             log.info("Zip Code input field or error message is not found")
 
-        time.sleep(10)
+        time.sleep(2)
 
+    # Test Basic info with invalid email
+    def test_pre_checkin_basic_info_with_invalid_email(self):
+        log = self.myLogger()
+        fake = Faker()
+        link = str(self.driver.get_cookie('link')['value'])
+        log.info("URL from Cookie " + link)
+        time.sleep(2)
+        self.driver.get(link)
+        log.info("Redirecting to pre-check-in page")
+        time.sleep(2)
+        preCheckinPage = PrecheckinPage(self.driver)
+        log.info("Clicking to get started")
+        preCheckinPage.getStartedBtn().click()
+        # Basic info tab
+        time.sleep(3)
+        log.info("Filling invalid email")
+        try:
+            preCheckinPage.getEmailInput().clear()
+            preCheckinPage.getEmailInput().send_keys(fake.first_name())
+            log.info("Clicking to save button")
+            preCheckinPage.getStartedBtn().click()
+        except:
+            log.info("Email input field is not found")
+
+        log.info("Clicking to save button")
+        preCheckinPage.getStartedBtn().click()
 
     # Test basic info with valid data page
     def test_pre_checkin_basic_info_with_valid_data(self):
@@ -272,4 +298,3 @@ class TestPreCheckin(BaseClass):
         log.info("Clicking to save button")
         preCheckinPage.getStartedBtn().click()
 
-        time.sleep(20)
