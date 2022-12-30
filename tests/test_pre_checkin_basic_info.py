@@ -186,6 +186,7 @@ class TestPreCheckin(BaseClass):
 
     # Test Basic info with invalid email
     def test_pre_checkin_basic_info_with_invalid_email(self):
+        """Test Basic info with invalid email"""
         log = self.myLogger()
         fake = Faker()
         link = str(self.driver.get_cookie('link')['value'])

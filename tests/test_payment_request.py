@@ -435,7 +435,7 @@ class TestPaymentRequest(BaseClass):
 
         log.info("Submit form using send link")
         paymentRequestPage.sendPaymentRequest().click()
-        time.sleep(2)
+        time.sleep(5)
         log.info("Success Message " + paymentRequestPage.sentLinkSuccessMessage().text)
         assert ('Payment Link Successfully' in paymentRequestPage.sentLinkSuccessMessage().text)
         requestId = self.getRequestKey()
