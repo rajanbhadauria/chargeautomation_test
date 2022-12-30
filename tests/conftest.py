@@ -4,20 +4,15 @@ from pathlib import Path
 import pytest
 from selenium import webdriver
 
-import chromedriver_binary  # Adds chromedriver binary to path
+#import chromedriver_binary  # Adds chromedriver binary to path
 driver = None
 
 
 @pytest.fixture(scope='class')
 def setup(request):
     global driver
-<<<<<<< HEAD
-    driver = webdriver.Chrome('C:/Users/rajan/Downloads/chromedriver_win32/chromedriver.exe')
-    driver.implicitly_wait(0.5)
-=======
     driver = webdriver.Chrome()
     driver.implicitly_wait(1)
->>>>>>> f2597c849d6f313a723aea42463fb037773bd5e6
     driver.get('https://master.chargeautomation.com/')
     driver.maximize_window()
     request.cls.driver = driver
