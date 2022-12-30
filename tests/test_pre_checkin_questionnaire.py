@@ -124,13 +124,14 @@ class TestPreCheckin(BaseClass):
         try:
             time.sleep(2)
             preCheckinPage.getPhoneInput().clear()
-            preCheckinPage.getPhoneInput().send_keys(fake.phone_number())
+            preCheckinPage.getPhoneInput().send_keys('98939098390')
         except:
             log.info("Phone input field is not found")
 
-        # phone number
-        log.info("Filling DOB field")
-        dob_date = datetime.datetime.now() + datetime.timedelta(days=-50)
+        # Date of birth
+        dob_date_obj = datetime.datetime.now() + datetime.timedelta(days=-50)
+        dob_date = dob_date_obj.strftime('%d/%m/%Y')
+        log.info("Filling DOB field - " + str(dob_date))
         try:
             preCheckinPage.getDobInput().clear()
             preCheckinPage.getDobInput().send_keys(dob_date)
