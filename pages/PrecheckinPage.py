@@ -14,6 +14,10 @@ class PrecheckinPage:
     def getStartedBtn(self):
         return self.driver.find_element(By.XPATH, "//a[contains(@class, 'btn-success')]")
 
+    ## get current tab title
+    def getActiveTabTitle(self):
+        return self.driver.find_element(By.XPATH, "//a[@class='gp-step active']/span[contains(@class, 'd-none')]")
+
     ## Basic info page elements
     def getFullNameInput(self):
         return self.baseClass.verify_element_presence(self.driver, By.ID, 6)
