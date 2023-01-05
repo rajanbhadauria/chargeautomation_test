@@ -11,6 +11,9 @@ class PrecheckinPage:
         self.driver = driver
         self.baseClass = BaseClass()
 
+    def getSuccessMessage(self):
+        return self.baseClass.verify_element_presence(self.driver, By.XPATH, "//div[@class='toast toast-success']/div")
+
     def getStartedBtn(self):
         return self.driver.find_element(By.XPATH, "//a[contains(@class, 'btn-success')]")
 

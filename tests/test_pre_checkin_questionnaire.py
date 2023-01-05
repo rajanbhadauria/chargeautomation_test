@@ -7,6 +7,7 @@ from faker import Faker
 from selenium.webdriver.support.ui import Select
 
 from pages.BookingPage import BookingPage
+from pages.PaymentRequestPage import PaymentRequestPage
 from pages.PrecheckinPage import PrecheckinPage
 from utilities.BaseClass import BaseClass
 from pages.HomePage import HomePage
@@ -191,9 +192,23 @@ class TestPreCheckin(BaseClass):
         log = self.myLogger()
         fake = Faker()
         time.sleep(5)
-        preCheckin = PrecheckinPage(self.driver)
-        tab_title = preCheckin.getActiveTabTitle().text
+        preCheckinPage = PrecheckinPage(self.driver)
+        tab_title = preCheckinPage.getActiveTabTitle().text
         log.info('Tab title is + ' + tab_title)
+        if tab_title == 'Add-on Services':
+            log.info("Add-on Services tab is found")
+            preCheckinPage.getStartedBtn().click()
+
+        if tab_title == 'Credit Card':
+            paymentRequestPage = PaymentRequestPage(self.driver)
+            log.info("Adding card - 4242424242424242 12/25 123 55555")
+            time.sleep(10)
+            paymentRequestPage.addCard("4242424242424242122512355555")
+            time.sleep(2)
+            self.driver.switch_to.default_content()
+            log.info("Charging now")
+            preCheckinPage.getStartedBtn().click()
+            time.sleep(5)
         if tab_title != 'Questionnaire':
             log.info("Questionnaire tab is not active")
             self.skip_all = True
@@ -201,11 +216,21 @@ class TestPreCheckin(BaseClass):
 
     #Test Questionnaire with blank data
     def test_pre_checkin_questionnaire_with_blank_data(self):
+        """Test Questionnaire with blank data"""
         log = self.myLogger()
+        preCheckinPage = PrecheckinPage(self.driver)
         if self.skip_all:
             log.info("'Test Questionnaire with blank data' skipped")
+            assert True
             return
-        pass
+        log.info("Questionnaire page found ")
+        log.info("Submitting questionnaire page without filling data")
+        preCheckinPage.getStartedBtn().click()
+        log.info("Finding success message")
+        success_message = preCheckinPage.getSuccessMessage().text
+        log.info("Message is - " + success_message)
+
+
 
 
 
