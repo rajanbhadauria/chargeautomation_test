@@ -76,5 +76,11 @@ class PrecheckinPage:
     def getChildrenInput(self):
         return self.baseClass.verify_element_presence(self.driver, By.ID, "guestChildren")
 
+    def getAllQuestionnaireFormInputs(self):
+        return self.driver.find_elements(By.XPATH, '//form//input')
+
+    def get3DSApprovalBtn(self):
+        return self.driver.find_element(By.ID, 'test-source-authorize-3ds')
+
 
 

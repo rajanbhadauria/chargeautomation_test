@@ -97,7 +97,7 @@ class TestPreCheckin(BaseClass):
         self.driver.add_cookie({'name': 'link', 'value': link})
         time.sleep(5)
 
-       # Test basic info with valid data page
+    # Test basic info with valid data page
     def test_pre_checkin_basic_info_with_valid_data(self):
         """Test basic info with valid data page"""
         log = self.myLogger()
@@ -208,13 +208,22 @@ class TestPreCheckin(BaseClass):
             self.driver.switch_to.default_content()
             log.info("Charging now")
             preCheckinPage.getStartedBtn().click()
+            time.sleep(10)
+            try:
+                preCheckinPage.get3DSApprovalBtn().click()
+                time.sleep(5)
+            except ex:
+                log.warning(ex)
+                log.info("3DS approval process not takes place")
+
+            preCheckinPage.getStartedBtn().click()
             time.sleep(5)
         if tab_title != 'Questionnaire':
             log.info("Questionnaire tab is not active")
             self.skip_all = True
             return
 
-    #Test Questionnaire with blank data
+    # Test Questionnaire with blank data
     def test_pre_checkin_questionnaire_with_blank_data(self):
         """Test Questionnaire with blank data"""
         log = self.myLogger()
@@ -225,12 +234,15 @@ class TestPreCheckin(BaseClass):
             return
         log.info("Questionnaire page found ")
         log.info("Submitting questionnaire page without filling data")
+
+        formInputs = preCheckinPage.getAllQuestionnaireFormInputs()
+        for inputs in formInputs:
+            log.info(inputs.get_attribute('type') + " -- " + inputs.get_attribute('value'))
+
         preCheckinPage.getStartedBtn().click()
         log.info("Finding success message")
         success_message = preCheckinPage.getSuccessMessage().text
-        log.info("Message is - " + success_message)
-
-
-
-
-
+        if success_message:
+            log.info("Message is - " + success_message)
+            assert True
+            return

@@ -52,8 +52,7 @@ class PaymentRequestPage:
         iframe = self.driver.find_element(By.XPATH, "//div[@id='card-element']//iframe")
         self.driver.switch_to.frame(iframe)
         self.driver.find_element(By.NAME, 'cardnumber').send_keys(card_data)
-        #self.driver.switch_to.parent_frame()
-        #self.driver.switch_to.frame(self.driver.find_element(By.ID, "paymentChargeModal"))
+
 
     def backToMainContent(self):
         self.driver.switch_to.default_content()
